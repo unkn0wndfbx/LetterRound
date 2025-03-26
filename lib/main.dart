@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
-import 'package:letter_round/pages/home_page.dart';
+import 'package:letter_round/pages/bottom_bar.dart';
+import 'package:letter_round/ressources/colors.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,14 +16,14 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'ArchivoBlack'),
       home: FlutterSplashScreen.fadeIn(
-        backgroundColor: Color(0xFF111111),
+        backgroundColor: backgroundColor,
         useImmersiveMode: true,
         childWidget: SizedBox(
           height: 200,
           width: 200,
           child: Image.asset("assets/images/splash.png"),
         ),
-        nextScreen: const HomePage(),
+        nextScreen: const BottomBar(initialIndex: 0),
       ),
     );
   }

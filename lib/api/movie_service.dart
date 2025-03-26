@@ -4,17 +4,19 @@ import 'package:letter_round/config/api_config.dart';
 import 'package:letter_round/models/movie.dart';
 
 class MovieService {
-  Future<List<Movie>> fetchMovies() async {
+  Future<List<Movie>> fetchMovies(String query) async {
     final response = await http.get(
-      Uri.parse(
-        '${ApiConfig.baseUrl}/movie/popular?api_key=${ApiConfig.apiKey}',
-      ),
+      Uri.parse('${ApiConfig.baseUrl}?s=$query&apikey=${ApiConfig.apiKey}'),
     );
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      List<dynamic> moviesJson = data['results'];
-      return moviesJson.map((json) => Movie.fromJson(json)).toList();
+      if (data['Response'] == 'True') {
+        List<dynamic> moviesJson = data['Search'];
+        return moviesJson.map((json) => Movie.fromJson(json)).toList();
+      } else {
+        throw Exception(data['Error']);
+      }
     } else {
       throw Exception('Erreur lors du chargement des films');
     }

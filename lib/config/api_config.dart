@@ -1,4 +1,4 @@
 class ApiConfig {
-  static const String apiKey = 'API_KEY';
-  static const String baseUrl = 'https://api.themoviedb.org/3';
+  static const String apiKey = '67fbee76';
+  static const String baseUrl = 'http://www.omdbapi.com/';
 }
