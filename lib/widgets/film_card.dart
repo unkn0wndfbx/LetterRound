@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/ressources/colors.dart';
 
+import '../pages/info_film.dart';
+
 class FilmCard extends StatelessWidget {
   const FilmCard({super.key, required this.movie, this.isDate});
 
@@ -22,10 +24,10 @@ class FilmCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          /*  Navigator.push(
+          Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => FilmDetailPage(movie: movie)),
-          ); */
+            MaterialPageRoute(builder: (context) => InfoFilm(movie: movie)),
+          );
         },
         borderRadius: BorderRadius.circular(12),
         splashColor: blackColor,

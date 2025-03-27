@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
 
-class InfoFilm extends StatelessWidget {
-  final String title;
-  final String year;
-  final String synopsis;
+import '../models/movie.dart';
 
-  const InfoFilm({
-    Key? key,
-    required this.title,
-    required this.year,
-    required this.synopsis,
-  }) : super(key: key);
+class InfoFilm extends StatelessWidget {
+  final Movie movie;
+
+  const InfoFilm({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +42,12 @@ class InfoFilm extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      title,
-                      style: TextStyle(fontSize: 24, color: whiteColor, fontWeight: FontWeight.bold),
+                      movie.title,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: whiteColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Container(
                       height: 30,
@@ -63,17 +62,21 @@ class InfoFilm extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  year,
+                  movie.year,
                   style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
                 SizedBox(height: 20),
                 Text(
                   'Synopsis',
-                  style: TextStyle(fontSize: 16, color: greyColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: greyColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SizedBox(height: 8),
                 Text(
-                  synopsis,
+                  movie.type ?? "Aucun type disponible",
                   style: TextStyle(fontSize: 16, color: whiteColor),
                 ),
                 SizedBox(height: 16),

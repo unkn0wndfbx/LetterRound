@@ -42,7 +42,7 @@ class _BottomBarState extends State<BottomBar> {
             [
               const HomePage(),
               const FilmsPage(),
-              const InfoFilm(title: "Titre1", year: "2001", synopsis: "leisjfbougfidvnoisdwnsfvuohcbsilwjvnhksrejfndhuoesjlkndfvhikdnfxbgukvngruidfvnoiureudxsnfuixrkvbkrudbvfiudsbvniufdkxbnouisdgohi"),
+              /*const InfoFilm(title: "Titre1", year: "2001", synopsis: "leisjfbougfidvnoisdwnsfvuohcbsilwjvnhksrejfndhuoesjlkndfvhikdnfxbgukvngruidfvnoiureudxsnfuixrkvbkrudbvfiudsbvniufdkxbnouisdgohi"),*/
             ][_currentIndex],
         bottomNavigationBar: SalomonBottomBar(
           margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
