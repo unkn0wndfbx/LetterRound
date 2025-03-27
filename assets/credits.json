@@ -1,0 +1,54 @@
+{
+  "sections": [
+    {
+      "title": "Développement",
+      "items": [
+        {
+          "title": "Développeur principal",
+          "name": "Martin Bagot",
+          "subtitle": "Conception et développement des fonctionnalités principales de l'application.",
+          "link": ""
+        },
+        {
+          "title": "Développeur principal",
+          "name": "Titouan Helbert",
+          "subtitle": "Conception et développement du scraping des sommets avec des coordonnées définies.",
+          "link": ""
+        }
+      ]
+    },
+    {
+      "title": "Design",
+      "items": [
+        {
+          "title": "Designer UI/UX",
+          "name": "THDev",
+          "subtitle": "Conception de l'expérience utilisateur et des interfaces graphiques.",
+          "link": ""
+        }
+      ]
+    },
+    {
+      "title": "Traduction",
+      "items": [
+        {
+          "title": "Designer UI/UX",
+          "name": "THDev",
+          "subtitle": "Conception de l'expérience utilisateur et des interfaces graphiques.",
+          "link": ""
+        }
+      ]
+    },
+    {
+      "title": "Partenaires et Fournisseurs",
+      "items": [
+        {
+          "title": "API de films et séries",
+          "name": "OMB",
+          "subtitle": "Site officiel",
+          "link": "http://www.omdbapi.com/"
+        }
+      ]
+    }
+  ]
+}

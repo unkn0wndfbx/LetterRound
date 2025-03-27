@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:letter_round/pages/bottom_bar.dart';
+import 'package:letter_round/pages/credits_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 
 class NavBar extends StatelessWidget {
@@ -69,13 +70,11 @@ class NavBar extends StatelessWidget {
                 "Crédits",
                 style: TextStyle(fontSize: 17, color: whiteColor),
               ),
-              /*  onTap:
+              onTap:
                   () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
-                    ),
-                  ), */
+                    MaterialPageRoute(builder: (context) => CreditsPage()),
+                  ),
             ),
             Divider(
               thickness: 1,
