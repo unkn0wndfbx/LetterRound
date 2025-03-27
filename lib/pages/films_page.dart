@@ -1,7 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/api/movie_service.dart';
 import 'package:letter_round/models/movie.dart';
+import 'package:letter_round/pages/nav_bar.dart';
+import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/widgets/film_card.dart';
+import 'package:letter_round/widgets/search_bar.dart';
 
 class FilmsPage extends StatefulWidget {
   const FilmsPage({super.key});
@@ -12,11 +17,23 @@ class FilmsPage extends StatefulWidget {
 
 class _FilmsPageState extends State<FilmsPage> {
   late Future<List<Movie>> futureMovies;
+  List<Movie> displayedMovies = [];
 
   @override
   void initState() {
     super.initState();
     futureMovies = MovieService().fetchMovies('Inception');
+    futureMovies.then((movies) {
+      setState(() {
+        displayedMovies = movies;
+      });
+    });
+  }
+
+  void _updateMovies(List<Movie> movies) {
+    setState(() {
+      displayedMovies = movies;
+    });
   }
 
   @override
@@ -24,8 +41,37 @@ class _FilmsPageState extends State<FilmsPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
+      appBar: AppBar(
+        backgroundColor: blackColor,
+        elevation: 0,
+        iconTheme: const IconThemeData(size: 32, color: whiteColor),
+        leading: Builder(
+          builder:
+              (context) => IconButton(
+                icon: Icon(CupertinoIcons.bars, size: 32, color: whiteColor),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 14),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+              icon: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+            ),
+          ),
+        ],
+      ),
+      drawer: NavBar(),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<List<Movie>>(
           future: futureMovies,
           builder: (context, snapshot) {
@@ -37,87 +83,32 @@ class _FilmsPageState extends State<FilmsPage> {
               return const Center(child: Text('Aucun film trouvé.'));
             } else {
               return Column(
+                spacing: 16.0,
                 children: [
+                  CustomSearchBar(onSearchResults: _updateMovies),
                   Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: blackColor,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics:
-                            const NeverScrollableScrollPhysics(), // Pour éviter un scroll conflictuel
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // Deux cartes par ligne
-                              crossAxisSpacing: 8.0,
-                              mainAxisSpacing: 8.0,
-                              childAspectRatio:
-                                  0.7, // Ajuste le ratio largeur/hauteur des cartes
-                            ),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          final movie = snapshot.data![index];
-                          return Card(
-                            color: backgroundColor,
-                            elevation: 4,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(12),
+                    child:
+                        displayedMovies.isEmpty
+                            ? const Center(
+                              child: Text(
+                                'Aucun film trouvé.',
+                                style: TextStyle(color: whiteColor),
+                              ),
+                            )
+                            : GridView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 16.0,
+                                    mainAxisSpacing: 16.0,
+                                    childAspectRatio: 1.21,
                                   ),
-                                  child:
-                                      movie.poster.isNotEmpty
-                                          ? Image.network(
-                                            movie.poster,
-                                            width: double.infinity,
-                                            height: 140,
-                                            fit: BoxFit.cover,
-                                          )
-                                          : Container(
-                                            height: 140,
-                                            color: Colors.grey,
-                                            child: const Icon(
-                                              Icons.movie,
-                                              size: 50,
-                                            ),
-                                          ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        movie.title,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        movie.year,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                              itemCount: displayedMovies.length,
+                              itemBuilder:
+                                  (context, index) =>
+                                      FilmCard(movie: displayedMovies[index]),
                             ),
-                          );
-                        },
-                      ),
-                    ),
                   ),
                 ],
               );
