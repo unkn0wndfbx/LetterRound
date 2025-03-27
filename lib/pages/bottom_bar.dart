@@ -49,7 +49,7 @@ class _BottomBarState extends State<BottomBar> {
           onTap: (index) => setCurrentIndex(index),
           items: [
             SalomonBottomBarItem(
-              icon: const Icon(CupertinoIcons.home),
+              icon: const Icon(CupertinoIcons.house_fill),
               title: const Text('Accueil'),
               selectedColor: whiteColor,
               unselectedColor: whiteColor.withValues(alpha: .45),
