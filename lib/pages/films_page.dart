@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/api/movie_service.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/pages/nav_bar.dart';
+import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/widgets/film_card.dart';
 import 'package:letter_round/widgets/search_bar.dart';
@@ -56,7 +57,15 @@ class _FilmsPageState extends State<FilmsPage> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 14),
-            child: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+              icon: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+            ),
           ),
         ],
       ),
