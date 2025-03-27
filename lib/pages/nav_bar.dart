@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:letter_round/pages/bottom_bar.dart';
 import 'package:letter_round/pages/credits_page.dart';
+import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 
 class NavBar extends StatelessWidget {
@@ -19,7 +20,7 @@ class NavBar extends StatelessWidget {
           children: [
             ListTile(
               leading: const Icon(
-                Icons.person_rounded,
+                CupertinoIcons.person_fill,
                 size: 26,
                 color: greyColor,
               ),
@@ -44,7 +45,7 @@ class NavBar extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(
-                Icons.settings_rounded,
+                CupertinoIcons.settings,
                 size: 26,
                 color: greyColor,
               ),
@@ -52,13 +53,11 @@ class NavBar extends StatelessWidget {
                 "Options",
                 style: TextStyle(fontSize: 17, color: whiteColor),
               ),
-              /*  onTap:
+              onTap:
                   () => Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
-                    ),
-                  ), */
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  ),
             ),
             ListTile(
               leading: const Icon(
@@ -85,7 +84,7 @@ class NavBar extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(
-                Icons.exit_to_app_rounded,
+                CupertinoIcons.clear_fill,
                 size: 26,
                 color: red,
               ),
