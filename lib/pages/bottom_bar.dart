@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/pages/films_page.dart';
 import 'package:letter_round/pages/home_page.dart';
+import 'package:letter_round/pages/info_film.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
@@ -41,7 +42,7 @@ class _BottomBarState extends State<BottomBar> {
             [
               const HomePage(),
               const FilmsPage(),
-              const HomePage(),
+              const InfoFilm(title: "Titre1", year: "2001", synopsis: "leisjfbougfidvnoisdwnsfvuohcbsilwjvnhksrejfndhuoesjlkndfvhikdnfxbgukvngruidfvnoiureudxsnfuixrkvbkrudbvfiudsbvniufdkxbnouisdgohi"),
             ][_currentIndex],
         bottomNavigationBar: SalomonBottomBar(
           margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
