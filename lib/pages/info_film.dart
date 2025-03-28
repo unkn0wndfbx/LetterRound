@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../api/movie_service.dart';
 import '../models/movie.dart';
 
@@ -15,12 +16,34 @@ class InfoFilm extends StatefulWidget {
 
 class _InfoFilmState extends State<InfoFilm> {
   late Future<Movie> movie;
+  bool hasSeen = false;
+  int selectedStars = 0;
 
   bool isValid(String? value) {
     return value != null &&
         value.isNotEmpty &&
         value != "N/A" &&
         value != "null";
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('${widget.imdbId}_seen', hasSeen);
+    await prefs.setInt('${widget.imdbId}_rating', selectedStars);
+  }
+
+  void toggleSeen() {
+    setState(() {
+      hasSeen = !hasSeen;
+    });
+    _savePreferences();
+  }
+
+  void updateRating(int rating) {
+    setState(() {
+      selectedStars = rating;
+    });
+    _savePreferences();
   }
 
   @override
@@ -138,37 +161,42 @@ class _InfoFilmState extends State<InfoFilm> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 36,
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: blackColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
-                          spacing: 4,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Text(
-                              "Je l'ai vu !",
-                              style: TextStyle(
-                                color: whiteColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: toggleSeen,
+                        child: Container(
+                          height: 40,
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: hasSeen ? blue : blackColor,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            spacing: 8,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Text(
+                                "Je l'ai vu !",
+                                style: TextStyle(
+                                  color: whiteColor,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Icon(
-                              CupertinoIcons.check_mark_circled_solid,
-                              size: 20,
-                              color: blue,
-                            ),
-                          ],
+                              Icon(
+                                hasSeen
+                                    ? CupertinoIcons.check_mark_circled_solid
+                                    : CupertinoIcons.check_mark_circled,
+                                size: 22,
+                                color: hasSeen ? Colors.white : greyColor,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Container(
-                        height: 36,
+                        height: 40,
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
@@ -178,14 +206,17 @@ class _InfoFilmState extends State<InfoFilm> {
                         child: Row(
                           spacing: 4,
                           mainAxisSize: MainAxisSize.min,
-                          children: List.generate(
-                            5,
-                            (index) => Icon(
-                              CupertinoIcons.star_fill,
-                              size: 18,
-                              color: yellow,
-                            ),
-                          ),
+                          children: List.generate(5, (index) {
+                            return GestureDetector(
+                              onTap: () => updateRating(index + 1),
+                              child: Icon(
+                                CupertinoIcons.star_fill,
+                                size: 22,
+                                color:
+                                    index < selectedStars ? yellow : greyColor,
+                              ),
+                            );
+                          }),
                         ),
                       ),
                     ],
@@ -206,7 +237,7 @@ class _InfoFilmState extends State<InfoFilm> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: blackColor,
+                      color: blackColor.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
