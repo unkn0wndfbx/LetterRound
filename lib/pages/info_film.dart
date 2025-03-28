@@ -82,7 +82,7 @@ class _InfoFilmState extends State<InfoFilm> {
         future: movie,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: red,));
+            return const Center(child: CircularProgressIndicator(color: red));
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -105,21 +105,90 @@ class _InfoFilmState extends State<InfoFilm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(12)),
-                      child:
-                          isValidPoster
-                              ? Image.network(
-                                movie.poster,
-                                fit: BoxFit.cover,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.4,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return _buildPlaceholder();
-                                },
-                              )
-                              : _buildPlaceholder(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: blackColor,
+                          width: 2,
+                          strokeAlign: BorderSide.strokeAlignOutside,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                        child:
+                            isValidPoster
+                                ? Image.network(
+                                  movie.poster,
+                                  fit: BoxFit.cover,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return _buildPlaceholder();
+                                  },
+                                )
+                                : _buildPlaceholder(),
+                      ),
                     ),
+                  ),
+                  const SizedBox(height: 32),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 36,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: blackColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          spacing: 4,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              "Je l'ai vu !",
+                              style: TextStyle(
+                                color: whiteColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Icon(
+                              CupertinoIcons.check_mark_circled_solid,
+                              size: 20,
+                              color: blue,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 36,
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: blackColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          spacing: 4,
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(
+                            5,
+                            (index) => Icon(
+                              CupertinoIcons.star_fill,
+                              size: 18,
+                              color: yellow,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 32),
                   Text(
@@ -158,7 +227,7 @@ class _InfoFilmState extends State<InfoFilm> {
                             style: const TextStyle(
                               fontSize: 18,
                               color: greyColor,
-                              fontWeight: FontWeight.w900
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         if (isValid(movie.runtime))
@@ -173,9 +242,9 @@ class _InfoFilmState extends State<InfoFilm> {
                           Text(
                             "•",
                             style: const TextStyle(
-                                fontSize: 18,
-                                color: greyColor,
-                                fontWeight: FontWeight.w900
+                              fontSize: 18,
+                              color: greyColor,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         if (isValid(movie.rated))
