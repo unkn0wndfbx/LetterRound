@@ -16,6 +16,13 @@ class InfoFilm extends StatefulWidget {
 class _InfoFilmState extends State<InfoFilm> {
   late Future<Movie> movie;
 
+  bool isValid(String? value) {
+    return value != null &&
+        value.isNotEmpty &&
+        value != "N/A" &&
+        value != "null";
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +48,7 @@ class _InfoFilmState extends State<InfoFilm> {
             } else if (snapshot.hasError) {
               return const Text(
                 'Error loading movie',
-                style: TextStyle(color: whiteColor),
+                style: TextStyle(color: red),
               );
             } else if (snapshot.hasData) {
               final movie = snapshot.data!;
@@ -75,12 +82,12 @@ class _InfoFilmState extends State<InfoFilm> {
         future: movie,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator(color: red,));
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
                 'Error: ${snapshot.error}',
-                style: const TextStyle(color: whiteColor),
+                style: const TextStyle(color: red),
               ),
             );
           } else if (snapshot.hasData) {
@@ -93,7 +100,7 @@ class _InfoFilmState extends State<InfoFilm> {
                 movie.poster != '';
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -114,34 +121,91 @@ class _InfoFilmState extends State<InfoFilm> {
                               : _buildPlaceholder(),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
                   Text(
                     "${movie.title} (${movie.year})",
                     style: const TextStyle(
                       fontSize: 24,
                       color: whiteColor,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    decoration: BoxDecoration(
+                      color: blackColor,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      spacing: 4,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (isValid(movie.genre))
+                          Text(
+                            movie.genre,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: greyColor,
+                            ),
+                          ),
+                        if (isValid(movie.runtime))
+                          Text(
+                            "•",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: greyColor,
+                              fontWeight: FontWeight.w900
+                            ),
+                          ),
+                        if (isValid(movie.runtime))
+                          Text(
+                            movie.runtime,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: greyColor,
+                            ),
+                          ),
+                        if (isValid(movie.rated))
+                          Text(
+                            "•",
+                            style: const TextStyle(
+                                fontSize: 18,
+                                color: greyColor,
+                                fontWeight: FontWeight.w900
+                            ),
+                          ),
+                        if (isValid(movie.rated))
+                          Text(
+                            movie.rated,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: greyColor,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (isValid(movie.director))
+                    Text(
+                      "Réalisé par : ${movie.director}",
+                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                    ),
+                  if (isValid(movie.writer))
+                    Text(
+                      "Écrit par : ${movie.writer}",
+                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                    ),
                   const SizedBox(height: 8),
-                  Text(
-                    "${movie.genre} • ${movie.runtime} • ${movie.rated}",
-                    style: const TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Réalisé par : ${movie.director}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  Text(
-                    "Écrit par : ${movie.writer}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Avec : ${movie.actors}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
+                  if (isValid(movie.actors))
+                    Text(
+                      "Avec : ${movie.actors}",
+                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                    ),
                   const SizedBox(height: 16),
                   const Text(
                     "Synopsis",
@@ -152,10 +216,11 @@ class _InfoFilmState extends State<InfoFilm> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    movie.plot,
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
+                  if (isValid(movie.plot))
+                    Text(
+                      movie.plot,
+                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                    ),
                   const SizedBox(height: 16),
                   const Text(
                     "Notes",
@@ -167,41 +232,64 @@ class _InfoFilmState extends State<InfoFilm> {
                   ),
                   const SizedBox(height: 8),
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children:
                         movie.ratings.map((rating) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              "${rating['Source']}: ${rating['Value']}",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: whiteColor,
+                          return Column(
+                            spacing: 2,
+                            children: [
+                              Row(
+                                spacing: 4,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${rating['Source']}:",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: whiteColor,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    "${rating['Value']}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: yellow,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            ],
                           );
                         }).toList(),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    "Langue : ${movie.language}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  Text(
-                    "Pays : ${movie.country}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  Text(
-                    "Sortie : ${movie.released}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  Text(
-                    "Box Office : ${movie.boxOffice}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
-                  Text(
-                    "Récompenses : ${movie.awards}",
-                    style: const TextStyle(fontSize: 16, color: whiteColor),
-                  ),
+                  if (isValid(movie.language))
+                    Text(
+                      "Langue : ${movie.language}",
+                      style: const TextStyle(fontSize: 16, color: greyColor),
+                    ),
+                  if (isValid(movie.country))
+                    Text(
+                      "Pays : ${movie.country}",
+                      style: const TextStyle(fontSize: 16, color: greyColor),
+                    ),
+                  if (isValid(movie.released))
+                    Text(
+                      "Sortie : ${movie.released}",
+                      style: const TextStyle(fontSize: 16, color: greyColor),
+                    ),
+                  if (isValid(movie.boxOffice))
+                    Text(
+                      "Box Office : ${movie.boxOffice}",
+                      style: const TextStyle(fontSize: 16, color: greyColor),
+                    ),
+                  if (isValid(movie.awards))
+                    Text(
+                      "Récompenses : ${movie.awards}",
+                      style: const TextStyle(fontSize: 16, color: greyColor),
+                    ),
                 ],
               ),
             );
