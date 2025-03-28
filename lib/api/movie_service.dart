@@ -21,4 +21,21 @@ class MovieService {
       throw Exception('Erreur lors du chargement des films');
     }
   }
+
+  Future<Movie> fetchMovie(String imdbId) async {
+    final response = await http.get(
+      Uri.parse('${ApiConfig.baseUrl}?i=$imdbId&apikey=${ApiConfig.apiKey}'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['Response'] == 'True') {
+        return Movie.fromJson(data);
+      } else {
+        throw Exception(data['Error']);
+      }
+    } else {
+      throw Exception('Erreur lors du chargement du film');
+    }
+  }
 }

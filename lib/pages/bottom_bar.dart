@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/pages/films_page.dart';
 import 'package:letter_round/pages/home_page.dart';
 import 'package:letter_round/pages/info_film.dart';
+import 'package:letter_round/pages/profile_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class BottomBar extends StatefulWidget {
   final int initialIndex;
+
   const BottomBar({super.key, required this.initialIndex});
 
   @override
@@ -42,7 +44,7 @@ class _BottomBarState extends State<BottomBar> {
             [
               const HomePage(),
               const FilmsPage(),
-              /*const InfoFilm(title: "Titre1", year: "2001", synopsis: "leisjfbougfidvnoisdwnsfvuohcbsilwjvnhksrejfndhuoesjlkndfvhikdnfxbgukvngruidfvnoiureudxsnfuixrkvbkrudbvfiudsbvniufdkxbnouisdgohi"),*/
+              const ProfilPage(),
             ][_currentIndex],
         bottomNavigationBar: SalomonBottomBar(
           margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),

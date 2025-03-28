@@ -26,7 +26,9 @@ class FilmCard extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => InfoFilm(movie: movie)),
+            MaterialPageRoute(
+              builder: (context) => InfoFilm(imdbId: movie.imdbID),
+            ),
           );
         },
         borderRadius: BorderRadius.circular(12),
