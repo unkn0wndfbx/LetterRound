@@ -39,6 +39,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: backgroundColor,
@@ -72,142 +75,168 @@ class _HomePageState extends State<HomePage> {
       ),
       drawer: NavBar(),
       body: SafeArea(
-        child: ListView(
-          children: [
-            FutureBuilder<Movie>(
-              future: topRatedMovie,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: blue),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Erreur : ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text('Aucun film trouvé.'));
-                } else {
-                  final movie = snapshot.data!;
-                  return FutureBuilder<Movie>(
-                    future: MovieService().fetchMovie(movie.imdbID),
-                    builder: (context, movieDetailsSnapshot) {
-                      if (movieDetailsSnapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(color: blue),
-                        );
-                      } else if (movieDetailsSnapshot.hasError) {
-                        return Center(
-                          child: Text('Erreur : ${movieDetailsSnapshot.error}'),
-                        );
-                      } else if (!movieDetailsSnapshot.hasData) {
-                        return const Center(
-                          child: Text('Aucun détail trouvé.'),
-                        );
-                      } else {
-                        final movieDetails = movieDetailsSnapshot.data!;
-                        bool isValidPoster =
-                            movieDetails.poster.isNotEmpty &&
-                            movieDetails.poster != "N/A" &&
-                            movieDetails.poster != 'null' &&
-                            movieDetails.poster != 'undefined' &&
-                            movieDetails.poster != '';
+        child:
+            isLandscape
+                ? Row(
+                  children: [
+                    topFilmContainer(isLandscape),
+                    Expanded(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: ListView(
+                          children: [
+                            _buildCategoryList('Action', actionMovies),
+                            _buildCategoryList('Comédie', comedyMovies),
+                            _buildCategoryList('Drame', dramaMovies),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+                : ListView(
+                  children: [
+                    topFilmContainer(isLandscape),
 
-                        return SingleChildScrollView(
-                          padding: const EdgeInsets.only(top: 32, bottom: 32),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: blackColor,
-                                    width: 2,
-                                    strokeAlign: BorderSide.strokeAlignOutside,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(12),
-                                  ),
-                                  child:
-                                      isValidPoster
-                                          ? Image.network(
-                                            movieDetails.poster,
-                                            fit: BoxFit.cover,
-                                            height:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.height *
-                                                0.45,
-                                            errorBuilder: (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) {
-                                              return _buildPlaceholder();
-                                            },
-                                          )
-                                          : _buildPlaceholder(),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                movieDetails.title,
-                                style: TextStyle(
-                                  color: whiteColor,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                spacing: 16,
-                                children: [
-                                  if (isValid(movieDetails.year))
-                                    Text(
-                                      movieDetails.year,
-                                      style: TextStyle(
-                                        color: greyColor,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-
-                                  if (isValid(movieDetails.genre))
-                                    Text(
-                                      movieDetails.genre,
-                                      style: TextStyle(
-                                        color: greyColor,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-
-                                  if (isValid(movieDetails.runtime))
-                                    Text(
-                                      movieDetails.runtime,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: greyColor,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  );
-                }
-              },
-            ),
-
-            _buildCategoryList('Action', actionMovies),
-            _buildCategoryList('Comédie', comedyMovies),
-            _buildCategoryList('Drame', dramaMovies),
-          ],
-        ),
+                    _buildCategoryList('Action', actionMovies),
+                    _buildCategoryList('Comédie', comedyMovies),
+                    _buildCategoryList('Drame', dramaMovies),
+                  ],
+                ),
       ),
+    );
+  }
+
+  FutureBuilder<Movie> topFilmContainer(bool isLandscape) {
+    return FutureBuilder<Movie>(
+      future: topRatedMovie,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator(color: blue));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Erreur : ${snapshot.error}'));
+        } else if (!snapshot.hasData) {
+          return const Center(child: Text('Aucun film trouvé.'));
+        } else {
+          final movie = snapshot.data!;
+          return FutureBuilder<Movie>(
+            future: MovieService().fetchMovie(movie.imdbID),
+            builder: (context, movieDetailsSnapshot) {
+              if (movieDetailsSnapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: blue),
+                );
+              } else if (movieDetailsSnapshot.hasError) {
+                return Center(
+                  child: Text('Erreur : ${movieDetailsSnapshot.error}'),
+                );
+              } else if (!movieDetailsSnapshot.hasData) {
+                return const Center(child: Text('Aucun détail trouvé.'));
+              } else {
+                final movieDetails = movieDetailsSnapshot.data!;
+                bool isValidPoster =
+                    movieDetails.poster.isNotEmpty &&
+                    movieDetails.poster != "N/A" &&
+                    movieDetails.poster != 'null' &&
+                    movieDetails.poster != 'undefined' &&
+                    movieDetails.poster != '';
+
+                return SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    vertical: 32,
+                    horizontal: isLandscape ? 32 : 0,
+                  ),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => InfoFilm(imdbId: movie.imdbID),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: blackColor,
+                              width: 2,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            ),
+                          ),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(12),
+                            ),
+                            child:
+                                isValidPoster
+                                    ? Image.network(
+                                      movieDetails.poster,
+                                      fit: BoxFit.cover,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                          (isLandscape ? 0.8 : 0.45),
+                                      errorBuilder: (
+                                        context,
+                                        error,
+                                        stackTrace,
+                                      ) {
+                                        return _buildPlaceholder();
+                                      },
+                                    )
+                                    : _buildPlaceholder(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        movieDetails.title,
+                        style: TextStyle(
+                          color: whiteColor,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: 16,
+                        children: [
+                          if (isValid(movieDetails.year))
+                            Text(
+                              movieDetails.year,
+                              style: TextStyle(color: greyColor, fontSize: 16),
+                            ),
+
+                          if (isValid(movieDetails.genre) && !isLandscape)
+                            Text(
+                              movieDetails.genre,
+                              style: TextStyle(color: greyColor, fontSize: 16),
+                            ),
+
+                          if (isValid(movieDetails.runtime))
+                            Text(
+                              movieDetails.runtime,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: greyColor,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+          );
+        }
+      },
     );
   }
 
@@ -241,36 +270,41 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(height: 4),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children:
-                        snapshot.data!.map((movie) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(6),
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Row(
+                      children:
+                          snapshot.data!.map((movie) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
                               ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) =>
-                                              InfoFilm(imdbId: movie.imdbID),
-                                    ),
-                                  );
-                                },
-                                child: Image.network(
-                                  movie.poster,
-                                  width: 130,
-                                  height: 185,
-                                  fit: BoxFit.cover,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(6),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                InfoFilm(imdbId: movie.imdbID),
+                                      ),
+                                    );
+                                  },
+                                  child: Image.network(
+                                    movie.poster,
+                                    width: 130,
+                                    height: 185,
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                    ),
                   ),
                 ),
               ],

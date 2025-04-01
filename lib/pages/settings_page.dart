@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:letter_round/pages/credits_page.dart';
+import 'package:letter_round/pages/language_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:letter_round/widgets/confirmation_dialog.dart';
 import 'package:letter_round/widgets/settings_card.dart';
@@ -15,66 +16,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _showDialog = false;
-  bool _showDialogDelete = false;
-  bool _showDialogDeleteConfirm = false;
-
-  void _logout() {
-    // Logique pour la déconnexion
-    // setState pour gérer l'état de l'utilisateur, comme dans le code React Native
-  }
-
-  void _deleteAccount() {
-    // Logique pour supprimer le compte
-  }
-
-  void _handleLogout() {
-    setState(() {
-      _showDialog = true;
-    });
-  }
-
-  void _confirmLogout() {
-    _logout();
-    setState(() {
-      _showDialog = false;
-    });
-  }
-
-  void _cancelLogout() {
-    setState(() {
-      _showDialog = false;
-    });
-  }
-
-  void _handleDeleteAccount() {
-    setState(() {
-      _showDialogDelete = true;
-    });
-  }
-
-  void _confirmDelete() {
-    setState(() {
-      _showDialogDelete = false;
-      _showDialogDeleteConfirm = true;
-    });
-  }
-
-  void _confirmDeleteAgain() {
-    _deleteAccount();
-    setState(() {
-      _showDialogDelete = false;
-      _showDialogDeleteConfirm = false;
-    });
-  }
-
-  void _cancelDelete() {
-    setState(() {
-      _showDialogDelete = false;
-      _showDialogDeleteConfirm = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -109,22 +50,12 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingsCard(
-                title: "Crédits",
-                icon: CupertinoIcons.info_circle_fill,
-                onPress: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CreditsPage()),
-                  );
-                },
-              ),
-              SettingsCard(
-                title: "Language",
+                title: "Langues",
                 icon: CupertinoIcons.globe,
                 onPress: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreditsPage()),
+                    MaterialPageRoute(builder: (context) => LanguagePage()),
                   );
                 },
               ),
@@ -159,30 +90,6 @@ class _SettingsPageState extends State<SettingsPage> {
             ],
           ),
         ),
-        // Dialogs
-        floatingActionButton:
-            _showDialog
-                ? ConfirmationDialog(
-                  visible: _showDialog,
-                  onConfirm: _confirmLogout,
-                  onCancel: _cancelLogout,
-                  title: 'Are you sure you want to log out?',
-                )
-                : _showDialogDelete
-                ? ConfirmationDialog(
-                  visible: _showDialogDelete,
-                  onConfirm: _confirmDelete,
-                  onCancel: _cancelDelete,
-                  title: 'Are you sure you want to delete your account?',
-                )
-                : _showDialogDeleteConfirm
-                ? ConfirmationDialog(
-                  visible: _showDialogDeleteConfirm,
-                  onConfirm: _confirmDeleteAgain,
-                  onCancel: _cancelDelete,
-                  title: 'This action is irreversible!',
-                )
-                : SizedBox.shrink(),
       ),
     );
   }
