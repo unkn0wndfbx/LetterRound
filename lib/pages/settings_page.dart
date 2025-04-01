@@ -109,18 +109,6 @@ class _SettingsPageState extends State<SettingsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SettingsCard(
-                title: "Profil",
-                icon: CupertinoIcons.person_fill,
-                onPress: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BottomBar(initialIndex: 2),
-                    ),
-                  );
-                },
-              ),
-              SettingsCard(
                 title: "Crédits",
                 icon: CupertinoIcons.info_circle_fill,
                 onPress: () {

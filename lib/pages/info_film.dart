@@ -26,6 +26,14 @@ class _InfoFilmState extends State<InfoFilm> {
         value != "null";
   }
 
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      hasSeen = prefs.getBool('${widget.imdbId}_seen') ?? false;
+      selectedStars = prefs.getInt('${widget.imdbId}_rating') ?? 0;
+    });
+  }
+
   Future<void> _savePreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('${widget.imdbId}_seen', hasSeen);
@@ -35,6 +43,9 @@ class _InfoFilmState extends State<InfoFilm> {
   void toggleSeen() {
     setState(() {
       hasSeen = !hasSeen;
+      if(!hasSeen) {
+        selectedStars = 0;
+      }
     });
     _savePreferences();
   }
@@ -42,6 +53,7 @@ class _InfoFilmState extends State<InfoFilm> {
   void updateRating(int rating) {
     setState(() {
       selectedStars = rating;
+      hasSeen = rating > 0;
     });
     _savePreferences();
   }
@@ -50,6 +62,7 @@ class _InfoFilmState extends State<InfoFilm> {
   void initState() {
     super.initState();
     movie = MovieService().fetchMovie(widget.imdbId);
+    _loadPreferences();
   }
 
   @override
@@ -105,7 +118,7 @@ class _InfoFilmState extends State<InfoFilm> {
         future: movie,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: red));
+            return const Center(child: CircularProgressIndicator(color: blue));
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -209,11 +222,26 @@ class _InfoFilmState extends State<InfoFilm> {
                           children: List.generate(5, (index) {
                             return GestureDetector(
                               onTap: () => updateRating(index + 1),
-                              child: Icon(
-                                CupertinoIcons.star_fill,
-                                size: 22,
-                                color:
-                                    index < selectedStars ? yellow : greyColor,
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 300),
+                                transitionBuilder: (
+                                  Widget child,
+                                  Animation<double> animation,
+                                ) {
+                                  return ScaleTransition(
+                                    scale: animation,
+                                    child: child,
+                                  );
+                                },
+                                child: Icon(
+                                  CupertinoIcons.star_fill,
+                                  key: ValueKey(index < selectedStars),
+                                  size: 22,
+                                  color:
+                                      index < selectedStars
+                                          ? yellow
+                                          : greyColor,
+                                ),
                               ),
                             );
                           }),

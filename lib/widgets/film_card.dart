@@ -6,10 +6,11 @@ import 'package:letter_round/ressources/colors.dart';
 import '../pages/info_film.dart';
 
 class FilmCard extends StatelessWidget {
-  const FilmCard({super.key, required this.movie, this.isDate});
+  const FilmCard({super.key, required this.movie, this.isDate, this.stars});
 
   final Movie movie;
   final bool? isDate;
+  final int? stars;
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +64,37 @@ class FilmCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      movie.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: whiteColor,
-                      ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            movie.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: whiteColor,
+                            ),
+                          ),
+                        ),
+                        if (movie.stars > 0)
+                          Row(
+                            children: [
+                              Text(
+                                movie.stars.toString(),
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: yellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Icon(Icons.star, color: yellow, size: 16),
+                            ],
+                          ),
+                      ],
                     ),
                   ),
                   if (isDate == true)

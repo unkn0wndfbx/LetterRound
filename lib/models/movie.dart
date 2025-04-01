@@ -21,6 +21,14 @@ class Movie {
   final String type;
   final String boxOffice;
 
+  int _stars = 0;
+
+  int get stars => _stars;
+
+  set stars(int rating) {
+    _stars = rating;
+  }
+
   Movie({
     required this.imdbID,
     required this.title,
@@ -43,38 +51,43 @@ class Movie {
     required this.imdbVotes,
     required this.type,
     required this.boxOffice,
-  });
+    int stars = 0,
+  }) {
+    _stars = stars;
+  }
 
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
-      imdbID: json['imdbID'],
-      title: json['Title'],
-      year: json['Year'],
-      rated: json['Rated'],
-      released: json['Released'],
-      runtime: json['Runtime'],
-      genre: json['Genre'],
-      director: json['Director'],
-      writer: json['Writer'],
-      actors: json['Actors'],
-      plot: json['Plot'],
-      language: json['Language'],
-      country: json['Country'],
-      awards: json['Awards'],
-      poster: json['Poster'],
-      ratings: List<Map<String, String>>.from(
-        (json['Ratings'] as List).map(
-          (rating) => {
-            'Source': rating['Source'].toString(),
-            'Value': rating['Value'].toString(),
-          },
-        ),
-      ),
-      metascore: json['Metascore'],
-      imdbRating: json['imdbRating'],
-      imdbVotes: json['imdbVotes'],
-      type: json['Type'],
-      boxOffice: json['BoxOffice'],
+      imdbID: json['imdbID'] ?? '',
+      title: json['Title'] ?? 'Titre inconnu',
+      year: json['Year'] ?? 'N/A',
+      rated: json['Rated'] ?? 'N/A',
+      released: json['Released'] ?? 'N/A',
+      runtime: json['Runtime'] ?? 'N/A',
+      genre: json['Genre'] ?? 'N/A',
+      director: json['Director'] ?? 'N/A',
+      writer: json['Writer'] ?? 'N/A',
+      actors: json['Actors'] ?? 'N/A',
+      plot: json['Plot'] ?? 'Résumé indisponible',
+      language: json['Language'] ?? 'N/A',
+      country: json['Country'] ?? 'N/A',
+      awards: json['Awards'] ?? 'N/A',
+      poster: json['Poster'] ?? '',
+      ratings:
+          (json['Ratings'] as List?)
+              ?.map(
+                (rating) => {
+                  'Source': rating['Source'].toString(),
+                  'Value': rating['Value'].toString(),
+                },
+              )
+              .toList() ??
+          [],
+      metascore: json['Metascore'] ?? 'N/A',
+      imdbRating: json['imdbRating'] ?? 'N/A',
+      imdbVotes: json['imdbVotes'] ?? 'N/A',
+      type: json['Type'] ?? 'N/A',
+      boxOffice: json['BoxOffice'] ?? 'N/A',
     );
   }
 

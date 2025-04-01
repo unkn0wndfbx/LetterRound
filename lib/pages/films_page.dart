@@ -22,12 +22,16 @@ class _FilmsPageState extends State<FilmsPage> {
   @override
   void initState() {
     super.initState();
-    futureMovies = MovieService().fetchMovies('Inception');
-    futureMovies.then((movies) {
-      setState(() {
-        displayedMovies = movies;
-      });
-    });
+    futureMovies = MovieService().fetchRandomMovies();
+    futureMovies
+        .then((movies) {
+          setState(() {
+            displayedMovies = movies;
+          });
+        })
+        .catchError((error) {
+          print('Erreur: $error');
+        });
   }
 
   void _updateMovies(List<Movie> movies) {
@@ -76,7 +80,7 @@ class _FilmsPageState extends State<FilmsPage> {
           future: futureMovies,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator(color: blue,));
             } else if (snapshot.hasError) {
               return Center(child: Text('Erreur : ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
