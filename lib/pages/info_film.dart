@@ -43,7 +43,7 @@ class _InfoFilmState extends State<InfoFilm> {
   void toggleSeen() {
     setState(() {
       hasSeen = !hasSeen;
-      if(!hasSeen) {
+      if (!hasSeen) {
         selectedStars = 0;
       }
     });
@@ -150,22 +150,26 @@ class _InfoFilmState extends State<InfoFilm> {
                           strokeAlign: BorderSide.strokeAlignOutside,
                         ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(12),
+                      child: Hero(
+                        tag: "moviePoster_${widget.imdbId}",
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          child:
+                              isValidPoster
+                                  ? Image.network(
+                                    movie.poster,
+                                    fit: BoxFit.cover,
+                                    height:
+                                        MediaQuery.of(context).size.height *
+                                        0.4,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return _buildPlaceholder();
+                                    },
+                                  )
+                                  : _buildPlaceholder(),
                         ),
-                        child:
-                            isValidPoster
-                                ? Image.network(
-                                  movie.poster,
-                                  fit: BoxFit.cover,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return _buildPlaceholder();
-                                  },
-                                )
-                                : _buildPlaceholder(),
                       ),
                     ),
                   ),

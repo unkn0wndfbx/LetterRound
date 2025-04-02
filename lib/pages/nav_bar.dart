@@ -5,17 +5,22 @@ import 'package:letter_round/pages/bottom_bar.dart';
 import 'package:letter_round/pages/credits_page.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return SizedBox(
       width: 230,
       child: Drawer(
         elevation: 0,
-        backgroundColor: backgroundColor,
+        backgroundColor:
+            themeProvider.isDarkMode ? backgroundColor : whiteColor,
         child: ListView(
           children: [
             ListTile(
@@ -24,9 +29,12 @@ class NavBar extends StatelessWidget {
                 size: 26,
                 color: greyColor,
               ),
-              title: const Text(
+              title: Text(
                 "Profil",
-                style: TextStyle(fontSize: 17, color: whiteColor),
+                style: TextStyle(
+                  fontSize: 17,
+                  color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                ),
               ),
               onTap:
                   () => Navigator.pushReplacement(
@@ -49,9 +57,12 @@ class NavBar extends StatelessWidget {
                 size: 26,
                 color: greyColor,
               ),
-              title: const Text(
+              title: Text(
                 "Options",
-                style: TextStyle(fontSize: 17, color: whiteColor),
+                style: TextStyle(
+                  fontSize: 17,
+                  color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                ),
               ),
               onTap:
                   () => Navigator.push(
@@ -65,9 +76,12 @@ class NavBar extends StatelessWidget {
                 size: 26,
                 color: greyColor,
               ),
-              title: const Text(
+              title: Text(
                 "Crédits",
-                style: TextStyle(fontSize: 17, color: whiteColor),
+                style: TextStyle(
+                  fontSize: 17,
+                  color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                ),
               ),
               onTap:
                   () => Navigator.push(

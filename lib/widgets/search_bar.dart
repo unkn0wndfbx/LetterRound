@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/api/movie_service.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomSearchBar extends StatefulWidget {
@@ -59,16 +61,34 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return TextField(
       controller: _controller,
       onChanged: _searchMovies,
-      style: const TextStyle(color: whiteColor),
+      style: TextStyle(
+        color: themeProvider.isDarkMode ? whiteColor : blackColor,
+      ),
       decoration: InputDecoration(
         hintText: "Rechercher un film...",
-        hintStyle: TextStyle(color: greyColor),
-        prefixIcon: Icon(CupertinoIcons.search, color: greyColor),
+        hintStyle: TextStyle(
+          color:
+              themeProvider.isDarkMode
+                  ? greyColor
+                  : greyColor.withValues(alpha: 0.35),
+        ),
+        prefixIcon: Icon(
+          CupertinoIcons.search,
+          color:
+              themeProvider.isDarkMode
+                  ? greyColor
+                  : greyColor.withValues(alpha: 0.35),
+        ),
         filled: true,
-        fillColor: greyColor.withValues(alpha: 0.25),
+        fillColor:
+            themeProvider.isDarkMode
+                ? greyColor.withValues(alpha: 0.25)
+                : greyColor.withValues(alpha: 0.15),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,

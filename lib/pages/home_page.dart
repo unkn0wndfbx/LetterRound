@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../api/movie_service.dart';
 import 'info_film.dart';
@@ -42,17 +44,25 @@ class _HomePageState extends State<HomePage> {
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
+      backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
       appBar: AppBar(
-        backgroundColor: blackColor,
+        backgroundColor:
+            themeProvider.isDarkMode
+                ? blackColor
+                : greyColor.withValues(alpha: 0.3),
         elevation: 0,
-        iconTheme: const IconThemeData(size: 32, color: whiteColor),
+        iconTheme: IconThemeData(
+          size: 32,
+          color: themeProvider.isDarkMode ? whiteColor : blackColor,
+        ),
         leading: Builder(
           builder:
               (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32, color: whiteColor),
+                icon: Icon(CupertinoIcons.bars, size: 32),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -68,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => SettingsPage()),
                 );
               },
-              icon: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+              icon: Icon(CupertinoIcons.settings, size: 32),
             ),
           ),
         ],
@@ -109,6 +119,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   FutureBuilder<Movie> topFilmContainer(bool isLandscape) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return FutureBuilder<Movie>(
       future: topRatedMovie,
       builder: (context, snapshot) {
@@ -117,7 +129,14 @@ class _HomePageState extends State<HomePage> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Erreur : ${snapshot.error}'));
         } else if (!snapshot.hasData) {
-          return const Center(child: Text('Aucun film trouvé.'));
+          return Center(
+            child: Text(
+              'Aucun film trouvé.',
+              style: TextStyle(
+                color: themeProvider.isDarkMode ? whiteColor : blackColor,
+              ),
+            ),
+          );
         } else {
           final movie = snapshot.data!;
           return FutureBuilder<Movie>(
@@ -133,7 +152,14 @@ class _HomePageState extends State<HomePage> {
                   child: Text('Erreur : ${movieDetailsSnapshot.error}'),
                 );
               } else if (!movieDetailsSnapshot.hasData) {
-                return const Center(child: Text('Aucun détail trouvé.'));
+                return Center(
+                  child: Text(
+                    'Aucun détail trouvé.',
+                    style: TextStyle(
+                      color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                    ),
+                  ),
+                );
               } else {
                 final movieDetails = movieDetailsSnapshot.data!;
                 bool isValidPoster =
@@ -164,7 +190,10 @@ class _HomePageState extends State<HomePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: blackColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? blackColor
+                                      : greyColor,
                               width: 2,
                               strokeAlign: BorderSide.strokeAlignOutside,
                             ),
@@ -197,7 +226,10 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         movieDetails.title,
                         style: TextStyle(
-                          color: whiteColor,
+                          color:
+                              themeProvider.isDarkMode
+                                  ? whiteColor
+                                  : blackColor,
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
@@ -241,6 +273,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCategoryList(String category, Future<List<Movie>> futureMovies) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return FutureBuilder<List<Movie>>(
       future: futureMovies,
       builder: (context, snapshot) {
@@ -261,7 +295,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     category,
                     style: TextStyle(
-                      color: whiteColor,
+                      color: themeProvider.isDarkMode ? whiteColor : blackColor,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -316,10 +350,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildPlaceholder() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       height: 120,
       width: double.infinity,
-      color: blackColor,
+      color:
+          themeProvider.isDarkMode
+              ? blackColor
+              : greyColor.withValues(alpha: 0.25),
       child: const Center(
         child: Icon(CupertinoIcons.film, size: 48, color: greyColor),
       ),

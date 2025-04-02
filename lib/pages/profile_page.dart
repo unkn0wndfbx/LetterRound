@@ -4,6 +4,8 @@ import 'package:letter_round/api/movie_service.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/film_card.dart';
@@ -91,17 +93,25 @@ class _ProfilPageState extends State<ProfilPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
+      backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
       appBar: AppBar(
-        backgroundColor: blackColor,
+        backgroundColor:
+            themeProvider.isDarkMode
+                ? blackColor
+                : greyColor.withValues(alpha: 0.3),
         elevation: 0,
-        iconTheme: const IconThemeData(size: 32, color: whiteColor),
+        iconTheme: IconThemeData(
+          size: 32,
+          color: themeProvider.isDarkMode ? whiteColor : blackColor,
+        ),
         leading: Builder(
           builder:
               (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32, color: whiteColor),
+                icon: Icon(CupertinoIcons.bars, size: 32),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -117,7 +127,7 @@ class _ProfilPageState extends State<ProfilPage> {
                   MaterialPageRoute(builder: (context) => SettingsPage()),
                 );
               },
-              icon: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+              icon: Icon(CupertinoIcons.settings, size: 32),
             ),
           ),
         ],
@@ -134,10 +144,10 @@ class _ProfilPageState extends State<ProfilPage> {
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(color: Colors.transparent),
-                child: const Text(
+                child: Text(
                   'Ma Cinémathèque',
                   style: TextStyle(
-                    color: whiteColor,
+                    color: themeProvider.isDarkMode ? whiteColor : blackColor,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                   ),
@@ -151,7 +161,10 @@ class _ProfilPageState extends State<ProfilPage> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: greyColor.withValues(alpha: 0.25),
+                  color:
+                      themeProvider.isDarkMode
+                          ? greyColor.withValues(alpha: 0.25)
+                          : greyColor.withValues(alpha: 0.15),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -243,7 +256,7 @@ class _ProfilPageState extends State<ProfilPage> {
                                     ? const Center(
                                       child: Text(
                                         'Aucun film trouvé.',
-                                        style: TextStyle(color: whiteColor),
+                                        style: TextStyle(color: red),
                                       ),
                                     )
                                     : GridView.builder(

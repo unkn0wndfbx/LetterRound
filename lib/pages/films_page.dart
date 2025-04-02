@@ -5,8 +5,10 @@ import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/pages/nav_bar.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
 import 'package:letter_round/widgets/film_card.dart';
 import 'package:letter_round/widgets/search_bar.dart';
+import 'package:provider/provider.dart';
 
 class FilmsPage extends StatefulWidget {
   const FilmsPage({super.key});
@@ -42,17 +44,23 @@ class _FilmsPageState extends State<FilmsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: backgroundColor,
+      backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
       appBar: AppBar(
-        backgroundColor: blackColor,
+        backgroundColor:
+            themeProvider.isDarkMode ? backgroundColor : whiteColor,
         elevation: 0,
-        iconTheme: const IconThemeData(size: 32, color: whiteColor),
+        iconTheme: IconThemeData(
+          size: 32,
+          color: themeProvider.isDarkMode ? whiteColor : blackColor,
+        ),
         leading: Builder(
           builder:
               (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32, color: whiteColor),
+                icon: Icon(CupertinoIcons.bars, size: 32),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -68,7 +76,7 @@ class _FilmsPageState extends State<FilmsPage> {
                   MaterialPageRoute(builder: (context) => SettingsPage()),
                 );
               },
-              icon: Icon(CupertinoIcons.settings, size: 32, color: whiteColor),
+              icon: Icon(CupertinoIcons.settings, size: 32),
             ),
           ),
         ],
@@ -80,7 +88,9 @@ class _FilmsPageState extends State<FilmsPage> {
           future: futureMovies,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator(color: blue,));
+              return const Center(
+                child: CircularProgressIndicator(color: blue),
+              );
             } else if (snapshot.hasError) {
               return Center(child: Text('Erreur : ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -93,10 +103,15 @@ class _FilmsPageState extends State<FilmsPage> {
                   Expanded(
                     child:
                         displayedMovies.isEmpty
-                            ? const Center(
+                            ? Center(
                               child: Text(
                                 'Aucun film trouvé.',
-                                style: TextStyle(color: whiteColor),
+                                style: TextStyle(
+                                  color:
+                                      themeProvider.isDarkMode
+                                          ? whiteColor
+                                          : blackColor,
+                                ),
                               ),
                             )
                             : GridView.builder(

@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../pages/info_film.dart';
 
@@ -20,6 +22,8 @@ class FilmCard extends StatelessWidget {
         movie.poster != 'null' &&
         movie.poster != 'undefined' &&
         movie.poster != '';
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Material(
       color: Colors.transparent,
@@ -42,21 +46,24 @@ class FilmCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                child:
-                    isValidPoster
-                        ? Image.network(
-                          fit: BoxFit.cover,
-                          movie.poster,
-                          width: double.infinity,
-                          height: 120,
-                          errorBuilder: (context, error, stackTrace) {
-                            print("Image failed to load: ${movie.poster}");
-                            return _buildPlaceholder();
-                          },
-                        )
-                        : _buildPlaceholder(),
+              Hero(
+                tag: "moviePoster_${movie.imdbID}",
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  child:
+                      isValidPoster
+                          ? Image.network(
+                            fit: BoxFit.cover,
+                            movie.poster,
+                            width: double.infinity,
+                            height: 120,
+                            errorBuilder: (context, error, stackTrace) {
+                              print("Image failed to load: ${movie.poster}");
+                              return _buildPlaceholder(context);
+                            },
+                          )
+                          : _buildPlaceholder(context),
+                ),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -73,10 +80,13 @@ class FilmCard extends StatelessWidget {
                             movie.title,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: whiteColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? whiteColor
+                                      : blackColor,
                             ),
                           ),
                         ),
@@ -114,11 +124,13 @@ class FilmCard extends StatelessWidget {
     );
   }
 
-  Widget _buildPlaceholder() {
+  Widget _buildPlaceholder(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       height: 120,
       width: double.infinity,
-      color: blackColor,
+      color: themeProvider.isDarkMode ? blackColor : greyColor.withValues(alpha: 0.25),
       child: Center(
         child: const Icon(CupertinoIcons.film, size: 48, color: greyColor),
       ),
