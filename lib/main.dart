@@ -5,7 +5,8 @@ import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),

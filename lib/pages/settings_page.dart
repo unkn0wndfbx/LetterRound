@@ -4,15 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
-  @override
-  _SettingsPageState createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  bool isDark = false;
 
   @override
   Widget build(BuildContext context) {
@@ -104,56 +97,27 @@ class _SettingsPageState extends State<SettingsPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'Version 1.0.0',
-                      style: TextStyle(
-                        color:
-                            themeProvider.isDarkMode
-                                ? greyColor
-                                : greyColor.withValues(alpha: 0.35),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      '© 2025 LetterRound',
-                      style: TextStyle(
-                        color:
-                            themeProvider.isDarkMode
-                                ? greyColor
-                                : greyColor.withValues(alpha: 0.35),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      'Rights Reserved',
-                      style: TextStyle(
-                        color:
-                            themeProvider.isDarkMode
-                                ? greyColor
-                                : greyColor.withValues(alpha: 0.35),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Text(
-                      'Made in France',
-                      style: TextStyle(
-                        color:
-                            themeProvider.isDarkMode
-                                ? greyColor
-                                : greyColor.withValues(alpha: 0.35),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    _infoText('Version 1.0.0', themeProvider.isDarkMode),
+                    _infoText('© 2025 LetterRound', themeProvider.isDarkMode),
+                    _infoText('Rights Reserved', themeProvider.isDarkMode),
+                    _infoText('Made in France', themeProvider.isDarkMode),
                   ],
                 ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _infoText(String text, bool isDarkMode) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: isDarkMode ? greyColor : greyColor.withOpacity(0.35),
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
       ),
     );
   }

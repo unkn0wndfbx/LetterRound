@@ -1,46 +1,24 @@
 {
   "sections": [
     {
-      "title": "Développement",
+      "title": "Développeurs",
       "items": [
         {
-          "title": "Développeur principal",
-          "name": "Martin Bagot",
-          "subtitle": "Conception et développement des fonctionnalités principales de l'application.",
-          "link": ""
+          "title": "Martin Bagot",
+          "name": "Conception et développement de l'application.",
+          "subtitle": "Profil GitHub",
+          "link": "https://github.com/MartinBgt"
         },
         {
-          "title": "Développeur principal",
-          "name": "Titouan Helbert",
-          "subtitle": "Conception et développement du scraping des sommets avec des coordonnées définies.",
-          "link": ""
+          "title": "Titouan Helbert",
+          "name": "Conception et développement de l'application.",
+          "subtitle": "Profil GitHub",
+          "link": "https://github.com/unkn0wndfbx"
         }
       ]
     },
     {
-      "title": "Design",
-      "items": [
-        {
-          "title": "Designer UI/UX",
-          "name": "THDev",
-          "subtitle": "Conception de l'expérience utilisateur et des interfaces graphiques.",
-          "link": ""
-        }
-      ]
-    },
-    {
-      "title": "Traduction",
-      "items": [
-        {
-          "title": "Designer UI/UX",
-          "name": "THDev",
-          "subtitle": "Conception de l'expérience utilisateur et des interfaces graphiques.",
-          "link": ""
-        }
-      ]
-    },
-    {
-      "title": "Partenaires et Fournisseurs",
+      "title": "Fournisseurs",
       "items": [
         {
           "title": "API de films et séries",

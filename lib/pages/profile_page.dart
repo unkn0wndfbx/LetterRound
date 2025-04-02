@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/api/movie_service.dart';
+import 'package:letter_round/config/database.dart';
 import 'package:letter_round/models/movie.dart';
+import 'package:letter_round/pages/edit_username_page.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
@@ -66,6 +68,8 @@ class _ProfilPageState extends State<ProfilPage> {
   @override
   void initState() {
     super.initState();
+    _loadUsername();
+
     futureMovies = _getSeenMovies();
     futureMovies.then((movies) {
       setState(() {
@@ -89,6 +93,29 @@ class _ProfilPageState extends State<ProfilPage> {
         displayedMovies = movies;
       });
     });
+  }
+
+  String? username;
+
+  Future<void> _loadUsername() async {
+    final name = await DatabaseHelper.instance.getUsername();
+    setState(() {
+      username = name ?? 'Anonyme';
+    });
+  }
+
+  Future<void> _editUsername() async {
+    final newUsername = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditUsernamePage(currentUsername: username ?? ''),
+      ),
+    );
+
+    if (newUsername != null && newUsername is String) {
+      await DatabaseHelper.instance.saveUsername(newUsername);
+      _loadUsername();
+    }
   }
 
   @override
@@ -166,55 +193,100 @@ class _ProfilPageState extends State<ProfilPage> {
                           ? greyColor.withValues(alpha: 0.25)
                           : greyColor.withValues(alpha: 0.15),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  spacing: 16,
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          "Note Moyenne",
-                          style: TextStyle(color: greyColor, fontSize: 14),
-                        ),
-                        Text(
-                          averageRating.toStringAsFixed(1),
-                          style: TextStyle(
-                            color: blue,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                        horizontal: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color:
+                            themeProvider.isDarkMode
+                                ? backgroundColor.withValues(alpha: 0.5)
+                                : backgroundColor.withValues(alpha: 0.15),
+                      ),
+                      child: Row(
+                        spacing: 8,
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            username ?? 'Anonyme',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? whiteColor
+                                      : blackColor,
+                            ),
                           ),
-                        ),
-                      ],
+                          GestureDetector(
+                            onTap: _editUsername,
+                            child: Icon(
+                              CupertinoIcons.pencil,
+                              color: greyColor,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
+
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Films vus",
-                          style: TextStyle(color: greyColor, fontSize: 14),
+                        Column(
+                          children: [
+                            Text(
+                              "Note Moyenne",
+                              style: TextStyle(color: greyColor, fontSize: 14),
+                            ),
+                            Text(
+                              averageRating.toStringAsFixed(1),
+                              style: TextStyle(
+                                color: blue,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          totalMovies.toString(),
-                          style: TextStyle(
-                            color: blue,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              "Films vus",
+                              style: TextStyle(color: greyColor, fontSize: 14),
+                            ),
+                            Text(
+                              totalMovies.toString(),
+                              style: TextStyle(
+                                color: blue,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          "Total heures",
-                          style: TextStyle(color: greyColor, fontSize: 14),
-                        ),
-                        Text(
-                          totalHours.toStringAsFixed(1),
-                          style: TextStyle(
-                            color: blue,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Column(
+                          children: [
+                            Text(
+                              "Total heures",
+                              style: TextStyle(color: greyColor, fontSize: 14),
+                            ),
+                            Text(
+                              totalHours.toStringAsFixed(1),
+                              style: TextStyle(
+                                color: blue,
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -239,9 +311,24 @@ class _ProfilPageState extends State<ProfilPage> {
                         child: CircularProgressIndicator(color: blue),
                       );
                     } else if (snapshot.hasError) {
-                      return Center(child: Text('Erreur : ${snapshot.error}'));
+                      return Center(
+                        child: Text(
+                          'Erreur : ${snapshot.error}',
+                          style: TextStyle(color: red),
+                        ),
+                      );
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(child: Text('Aucun film trouvé.'));
+                      return Center(
+                        child: Text(
+                          'Aucun film trouvé.',
+                          style: TextStyle(
+                            color:
+                                themeProvider.isDarkMode
+                                    ? whiteColor
+                                    : blackColor,
+                          ),
+                        ),
+                      );
                     } else {
                       return Column(
                         spacing: 16.0,

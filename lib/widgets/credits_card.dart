@@ -38,7 +38,7 @@ class CreditsCard extends StatelessWidget {
               child: Text(
                 name,
                 style: TextStyle(
-                  color: whiteColor,
+                  color: whiteColor.withValues(alpha: 0.6),
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),

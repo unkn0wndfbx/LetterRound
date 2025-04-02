@@ -125,9 +125,19 @@ class _HomePageState extends State<HomePage> {
       future: topRatedMovie,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: blue));
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(color: blue),
+            ),
+          );
         } else if (snapshot.hasError) {
-          return Center(child: Text('Erreur : ${snapshot.error}'));
+          return Center(
+            child: Text(
+              'Erreur : ${snapshot.error}',
+              style: TextStyle(color: red),
+            ),
+          );
         } else if (!snapshot.hasData) {
           return Center(
             child: Text(
@@ -145,7 +155,10 @@ class _HomePageState extends State<HomePage> {
               if (movieDetailsSnapshot.connectionState ==
                   ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(color: blue),
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(color: blue),
+                  ),
                 );
               } else if (movieDetailsSnapshot.hasError) {
                 return Center(
@@ -279,11 +292,29 @@ class _HomePageState extends State<HomePage> {
       future: futureMovies,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: blue));
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: CircularProgressIndicator(color: blue),
+            ),
+          );
         } else if (snapshot.hasError) {
-          return Center(child: Text('Erreur : ${snapshot.error}'));
+          return Center(
+            child: Text(
+              'Erreur : ${snapshot.error}',
+              style: TextStyle(color: red),
+            ),
+          );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Aucun film trouvé.'));
+          return Center(
+            child: Text(
+              'Aucun détail trouvé.',
+              style: TextStyle(
+                color: themeProvider.isDarkMode ? whiteColor : blackColor,
+              ),
+            ),
+          );
+          ;
         } else {
           return Padding(
             padding: const EdgeInsets.only(bottom: 16, left: 8),

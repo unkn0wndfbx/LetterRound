@@ -4,6 +4,7 @@ import 'package:letter_round/ressources/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/movie_service.dart';
 import '../models/movie.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class InfoFilm extends StatefulWidget {
   const InfoFilm({super.key, required this.imdbId});
@@ -40,11 +41,27 @@ class _InfoFilmState extends State<InfoFilm> {
     await prefs.setInt('${widget.imdbId}_rating', selectedStars);
   }
 
+  final snackBar = SnackBar(
+    elevation: 0,
+    behavior: SnackBarBehavior.floating,
+    backgroundColor: Colors.transparent,
+    content: AwesomeSnackbarContent(
+      title: 'Je l\'ai vu !',
+      message: 'Le film vient d\'être ajouté à votre cinémathèque.',
+      contentType: ContentType.success,
+      inMaterialBanner: true,
+    ),
+  );
+
   void toggleSeen() {
     setState(() {
       hasSeen = !hasSeen;
       if (!hasSeen) {
         selectedStars = 0;
+      } else {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
       }
     });
     _savePreferences();

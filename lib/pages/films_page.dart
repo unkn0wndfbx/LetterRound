@@ -92,9 +92,21 @@ class _FilmsPageState extends State<FilmsPage> {
                 child: CircularProgressIndicator(color: blue),
               );
             } else if (snapshot.hasError) {
-              return Center(child: Text('Erreur : ${snapshot.error}'));
+              return Center(
+                child: Text(
+                  'Erreur : ${snapshot.error}',
+                  style: TextStyle(color: red),
+                ),
+              );
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('Aucun film trouvé.'));
+              return Center(
+                child: Text(
+                  'Aucun film trouvé.',
+                  style: TextStyle(
+                    color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                  ),
+                ),
+              );
             } else {
               return Column(
                 spacing: 16.0,
