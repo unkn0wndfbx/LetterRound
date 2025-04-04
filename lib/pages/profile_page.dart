@@ -27,6 +27,7 @@ class _ProfilPageState extends State<ProfilPage> {
   double averageRating = 0.0;
   int totalMovies = 0;
   double totalHours = 0.0;
+  Movie? topRatedMovie;
 
   Future<List<Movie>> _getSeenMovies() async {
     final prefs = await SharedPreferences.getInstance();
@@ -55,6 +56,8 @@ class _ProfilPageState extends State<ProfilPage> {
 
     if (totalMovies > 0) {
       averageRating = totalRating / totalMovies;
+      seenMovies.sort((a, b) => b.stars.compareTo(a.stars));
+      topRatedMovie = seenMovies.first;
     }
 
     return seenMovies;
@@ -195,25 +198,26 @@ class _ProfilPageState extends State<ProfilPage> {
                 ),
                 child: Column(
                   spacing: 16,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 8,
-                        horizontal: 16,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color:
-                            themeProvider.isDarkMode
-                                ? backgroundColor.withValues(alpha: 0.5)
-                                : backgroundColor.withValues(alpha: 0.15),
-                      ),
-                      child: Row(
-                        spacing: 8,
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
+                    Row(
+                      spacing: 16,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (topRatedMovie != null)
+                          Center(
+                            child: CircleAvatar(
+                              radius: 28,
+                              backgroundImage: NetworkImage(
+                                topRatedMovie!.poster,
+                              ),
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),
+                        Expanded(
+                          child: Text(
                             username ?? 'Anonyme',
                             style: TextStyle(
                               fontSize: 18,
@@ -224,16 +228,26 @@ class _ProfilPageState extends State<ProfilPage> {
                                       : blackColor,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: _editUsername,
+                        ),
+                        GestureDetector(
+                          onTap: _editUsername,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? backgroundColor
+                                      : greyColor.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(100),
+                            ),
                             child: Icon(
                               CupertinoIcons.pencil,
                               color: greyColor,
-                              size: 20,
+                              size: 24,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
 
                     Row(
