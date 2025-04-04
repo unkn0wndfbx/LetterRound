@@ -6,6 +6,7 @@ import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({Key? key, required this.onSearchResults, this.isSeen})
@@ -62,6 +63,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return TextField(
       controller: _controller,
@@ -70,7 +72,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
         color: themeProvider.isDarkMode ? whiteColor : blackColor,
       ),
       decoration: InputDecoration(
-        hintText: "Rechercher un film...",
+        hintText: loc.rechercheFilm,
         hintStyle: TextStyle(
           color:
               themeProvider.isDarkMode

@@ -7,6 +7,7 @@ import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -14,6 +15,7 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return SizedBox(
       width: 230,
@@ -30,7 +32,7 @@ class NavBar extends StatelessWidget {
                 color: greyColor,
               ),
               title: Text(
-                "Profil",
+                loc.profil,
                 style: TextStyle(
                   fontSize: 17,
                   color: themeProvider.isDarkMode ? whiteColor : blackColor,
@@ -58,7 +60,7 @@ class NavBar extends StatelessWidget {
                 color: greyColor,
               ),
               title: Text(
-                "Options",
+                loc.options,
                 style: TextStyle(
                   fontSize: 17,
                   color: themeProvider.isDarkMode ? whiteColor : blackColor,
@@ -77,7 +79,7 @@ class NavBar extends StatelessWidget {
                 color: greyColor,
               ),
               title: Text(
-                "Crédits",
+                loc.credits,
                 style: TextStyle(
                   fontSize: 17,
                   color: themeProvider.isDarkMode ? whiteColor : blackColor,
@@ -102,8 +104,8 @@ class NavBar extends StatelessWidget {
                 size: 26,
                 color: red,
               ),
-              title: const Text(
-                "Quitter",
+              title: Text(
+                loc.quitter,
                 style: TextStyle(
                   fontSize: 17,
                   color: red,

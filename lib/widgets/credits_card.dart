@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CreditsCard extends StatelessWidget {
@@ -19,6 +21,8 @@ class CreditsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 32),
       child: Column(
@@ -27,7 +31,7 @@ class CreditsCard extends StatelessWidget {
           Text(
             '$title :',
             style: TextStyle(
-              color: whiteColor,
+              color: themeProvider.isDarkMode ? whiteColor : blackColor,
               fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
@@ -38,7 +42,10 @@ class CreditsCard extends StatelessWidget {
               child: Text(
                 name,
                 style: TextStyle(
-                  color: whiteColor.withValues(alpha: 0.6),
+                  color:
+                      themeProvider.isDarkMode
+                          ? whiteColor.withValues(alpha: 0.6)
+                          : blackColor.withValues(alpha: 0.4),
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -72,7 +79,10 @@ class CreditsCard extends StatelessWidget {
               child: Text(
                 subtitle,
                 style: TextStyle(
-                  color: whiteColor.withValues(alpha: 0.6),
+                  color:
+                      themeProvider.isDarkMode
+                          ? whiteColor.withValues(alpha: 0.6)
+                          : blackColor.withValues(alpha: 0.4),
                   fontSize: 14,
                 ),
               ),

@@ -4,7 +4,9 @@ import 'package:letter_round/models/movie.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
+import 'package:letter_round/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../api/movie_service.dart';
 import 'info_film.dart';
@@ -49,40 +51,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
-      appBar: AppBar(
-        backgroundColor:
-            themeProvider.isDarkMode
-                ? blackColor
-                : greyColor.withValues(alpha: 0.3),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          size: 32,
-          color: themeProvider.isDarkMode ? whiteColor : blackColor,
-        ),
-        leading: Builder(
-          builder:
-              (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-              icon: Icon(CupertinoIcons.settings, size: 32),
-            ),
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(themeProvider: themeProvider),
       drawer: NavBar(),
       body: SafeArea(
         child:
@@ -120,6 +89,7 @@ class _HomePageState extends State<HomePage> {
 
   FutureBuilder<Movie> topFilmContainer(bool isLandscape) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return FutureBuilder<Movie>(
       future: topRatedMovie,
@@ -141,7 +111,7 @@ class _HomePageState extends State<HomePage> {
         } else if (!snapshot.hasData) {
           return Center(
             child: Text(
-              'Aucun film trouvé.',
+              loc.aucunFilm,
               style: TextStyle(
                 color: themeProvider.isDarkMode ? whiteColor : blackColor,
               ),
@@ -167,7 +137,7 @@ class _HomePageState extends State<HomePage> {
               } else if (!movieDetailsSnapshot.hasData) {
                 return Center(
                   child: Text(
-                    'Aucun détail trouvé.',
+                    loc.aucunFilm,
                     style: TextStyle(
                       color: themeProvider.isDarkMode ? whiteColor : blackColor,
                     ),
@@ -211,27 +181,30 @@ class _HomePageState extends State<HomePage> {
                               strokeAlign: BorderSide.strokeAlignOutside,
                             ),
                           ),
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(12),
+                          child: Hero(
+                            tag: "moviePoster_${movie.imdbID}",
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(12),
+                              ),
+                              child:
+                                  isValidPoster
+                                      ? Image.network(
+                                        movieDetails.poster,
+                                        fit: BoxFit.cover,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                            (isLandscape ? 0.8 : 0.45),
+                                        errorBuilder: (
+                                          context,
+                                          error,
+                                          stackTrace,
+                                        ) {
+                                          return _buildPlaceholder();
+                                        },
+                                      )
+                                      : _buildPlaceholder(),
                             ),
-                            child:
-                                isValidPoster
-                                    ? Image.network(
-                                      movieDetails.poster,
-                                      fit: BoxFit.cover,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                          (isLandscape ? 0.8 : 0.45),
-                                      errorBuilder: (
-                                        context,
-                                        error,
-                                        stackTrace,
-                                      ) {
-                                        return _buildPlaceholder();
-                                      },
-                                    )
-                                    : _buildPlaceholder(),
                           ),
                         ),
                       ),
@@ -287,6 +260,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategoryList(String category, Future<List<Movie>> futureMovies) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return FutureBuilder<List<Movie>>(
       future: futureMovies,
@@ -308,13 +282,12 @@ class _HomePageState extends State<HomePage> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
             child: Text(
-              'Aucun détail trouvé.',
+              loc.aucunDetail,
               style: TextStyle(
                 color: themeProvider.isDarkMode ? whiteColor : blackColor,
               ),
             ),
           );
-          ;
         } else {
           return Padding(
             padding: const EdgeInsets.only(bottom: 16, left: 8),
@@ -344,26 +317,30 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                               ),
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(6),
-                                ),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                InfoFilm(imdbId: movie.imdbID),
-                                      ),
-                                    );
-                                  },
-                                  child: Image.network(
-                                    movie.poster,
-                                    width: 130,
-                                    height: 185,
-                                    fit: BoxFit.cover,
+                              child: Hero(
+                                tag: "moviePoster_${movie.imdbID}",
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(6),
+                                  ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => InfoFilm(
+                                                imdbId: movie.imdbID,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                    child: Image.network(
+                                      movie.poster,
+                                      width: 130,
+                                      height: 185,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                               ),

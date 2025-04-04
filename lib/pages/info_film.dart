@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/movie_service.dart';
 import '../models/movie.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InfoFilm extends StatefulWidget {
   const InfoFilm({super.key, required this.imdbId});
@@ -84,19 +87,31 @@ class _InfoFilmState extends State<InfoFilm> {
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
       appBar: AppBar(
-        backgroundColor: blackColor,
+        backgroundColor:
+            themeProvider.isDarkMode
+                ? blackColor
+                : greyColor.withValues(alpha: 0.3),
         elevation: 0,
-        iconTheme: const IconThemeData(size: 32, color: whiteColor),
+        iconTheme: IconThemeData(
+          size: 32,
+          color: themeProvider.isDarkMode ? whiteColor : blackColor,
+        ),
         title: FutureBuilder<Movie>(
           future: movie,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text(
+              return Text(
                 'Loading...',
-                style: TextStyle(color: whiteColor),
+                style: TextStyle(
+                  color: themeProvider.isDarkMode ? whiteColor : blackColor,
+                ),
               );
             } else if (snapshot.hasError) {
               return const Text(
@@ -107,8 +122,8 @@ class _InfoFilmState extends State<InfoFilm> {
               final movie = snapshot.data!;
               return Text(
                 movie.title,
-                style: const TextStyle(
-                  color: whiteColor,
+                style: TextStyle(
+                  color: themeProvider.isDarkMode ? whiteColor : blackColor,
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
@@ -120,11 +135,7 @@ class _InfoFilmState extends State<InfoFilm> {
         leading: Builder(
           builder:
               (context) => IconButton(
-                icon: const Icon(
-                  CupertinoIcons.back,
-                  size: 32,
-                  color: whiteColor,
-                ),
+                icon: const Icon(CupertinoIcons.back, size: 32),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -162,7 +173,10 @@ class _InfoFilmState extends State<InfoFilm> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: blackColor,
+                          color:
+                              themeProvider.isDarkMode
+                                  ? blackColor
+                                  : greyColor.withValues(alpha: 0.6),
                           width: 2,
                           strokeAlign: BorderSide.strokeAlignOutside,
                         ),
@@ -202,7 +216,12 @@ class _InfoFilmState extends State<InfoFilm> {
                           alignment: Alignment.center,
                           padding: const EdgeInsets.symmetric(horizontal: 12),
                           decoration: BoxDecoration(
-                            color: hasSeen ? blue : blackColor,
+                            color:
+                                hasSeen
+                                    ? blue
+                                    : themeProvider.isDarkMode
+                                    ? blackColor
+                                    : greyColor.withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -211,7 +230,7 @@ class _InfoFilmState extends State<InfoFilm> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                "Je l'ai vu !",
+                                loc.vu,
                                 style: TextStyle(
                                   color: whiteColor,
                                   fontSize: 20,
@@ -223,7 +242,12 @@ class _InfoFilmState extends State<InfoFilm> {
                                     ? CupertinoIcons.check_mark_circled_solid
                                     : CupertinoIcons.check_mark_circled,
                                 size: 22,
-                                color: hasSeen ? Colors.white : greyColor,
+                                color:
+                                    hasSeen
+                                        ? whiteColor
+                                        : themeProvider.isDarkMode
+                                        ? greyColor
+                                        : whiteColor,
                               ),
                             ],
                           ),
@@ -234,7 +258,10 @@ class _InfoFilmState extends State<InfoFilm> {
                         alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(horizontal: 12),
                         decoration: BoxDecoration(
-                          color: blackColor,
+                          color:
+                              themeProvider.isDarkMode
+                                  ? blackColor
+                                  : greyColor.withValues(alpha: 0.6),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Row(
@@ -261,7 +288,9 @@ class _InfoFilmState extends State<InfoFilm> {
                                   color:
                                       index < selectedStars
                                           ? yellow
-                                          : greyColor,
+                                          : themeProvider.isDarkMode
+                                          ? greyColor
+                                          : whiteColor,
                                 ),
                               ),
                             );
@@ -273,9 +302,9 @@ class _InfoFilmState extends State<InfoFilm> {
                   const SizedBox(height: 32),
                   Text(
                     "${movie.title} (${movie.year})",
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
-                      color: whiteColor,
+                      color: themeProvider.isDarkMode ? whiteColor : blackColor,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -286,7 +315,10 @@ class _InfoFilmState extends State<InfoFilm> {
                       vertical: 2,
                     ),
                     decoration: BoxDecoration(
-                      color: blackColor.withValues(alpha: 0.7),
+                      color:
+                          themeProvider.isDarkMode
+                              ? blackColor.withValues(alpha: 0.7)
+                              : blackColor.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -296,43 +328,58 @@ class _InfoFilmState extends State<InfoFilm> {
                         if (isValid(movie.genre))
                           Text(
                             movie.genre,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
-                              color: greyColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? greyColor
+                                      : greyColor.withValues(alpha: 0.8),
                             ),
                           ),
                         if (isValid(movie.runtime))
                           Text(
                             "•",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
-                              color: greyColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? greyColor
+                                      : greyColor.withValues(alpha: 0.8),
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         if (isValid(movie.runtime))
                           Text(
                             movie.runtime,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
-                              color: greyColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? greyColor
+                                      : greyColor.withValues(alpha: 0.8),
                             ),
                           ),
                         if (isValid(movie.rated))
                           Text(
                             "•",
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
-                              color: greyColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? greyColor
+                                      : greyColor.withValues(alpha: 0.8),
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         if (isValid(movie.rated))
                           Text(
                             movie.rated,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
-                              color: greyColor,
+                              color:
+                                  themeProvider.isDarkMode
+                                      ? greyColor
+                                      : greyColor.withValues(alpha: 0.8),
                             ),
                           ),
                       ],
@@ -341,26 +388,41 @@ class _InfoFilmState extends State<InfoFilm> {
                   const SizedBox(height: 16),
                   if (isValid(movie.director))
                     Text(
-                      "Réalisé par : ${movie.director}",
-                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                      "${loc.realisePar} : ${movie.director}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode ? whiteColor : blackColor,
+                      ),
                     ),
                   if (isValid(movie.writer))
                     Text(
-                      "Écrit par : ${movie.writer}",
-                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                      "${loc.ecritPar} : ${movie.writer}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode ? whiteColor : blackColor,
+                      ),
                     ),
                   const SizedBox(height: 8),
                   if (isValid(movie.actors))
                     Text(
-                      "Avec : ${movie.actors}",
-                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                      "${loc.avec} : ${movie.actors}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode ? whiteColor : blackColor,
+                      ),
                     ),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Synopsis",
+                  Text(
+                    loc.synopsis,
                     style: TextStyle(
                       fontSize: 18,
-                      color: greyColor,
+                      color:
+                          themeProvider.isDarkMode
+                              ? greyColor
+                              : greyColor.withValues(alpha: 0.8),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -368,14 +430,21 @@ class _InfoFilmState extends State<InfoFilm> {
                   if (isValid(movie.plot))
                     Text(
                       movie.plot,
-                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode ? whiteColor : blackColor,
+                      ),
                     ),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Notes",
+                  Text(
+                    loc.notes,
                     style: TextStyle(
                       fontSize: 18,
-                      color: greyColor,
+                      color:
+                          themeProvider.isDarkMode
+                              ? greyColor
+                              : greyColor.withValues(alpha: 0.8),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -393,9 +462,12 @@ class _InfoFilmState extends State<InfoFilm> {
                                 children: [
                                   Text(
                                     "${rating['Source']}:",
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
-                                      color: whiteColor,
+                                      color:
+                                          themeProvider.isDarkMode
+                                              ? whiteColor
+                                              : blackColor,
                                     ),
                                   ),
 
@@ -416,28 +488,58 @@ class _InfoFilmState extends State<InfoFilm> {
                   const SizedBox(height: 16),
                   if (isValid(movie.language))
                     Text(
-                      "Langue : ${movie.language}",
-                      style: const TextStyle(fontSize: 16, color: greyColor),
+                      "${loc.langue} : ${movie.language}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode
+                                ? greyColor
+                                : greyColor.withValues(alpha: 0.8),
+                      ),
                     ),
                   if (isValid(movie.country))
                     Text(
-                      "Pays : ${movie.country}",
-                      style: const TextStyle(fontSize: 16, color: greyColor),
+                      "${loc.pays} : ${movie.country}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode
+                                ? greyColor
+                                : greyColor.withValues(alpha: 0.8),
+                      ),
                     ),
                   if (isValid(movie.released))
                     Text(
-                      "Sortie : ${movie.released}",
-                      style: const TextStyle(fontSize: 16, color: greyColor),
+                      "${loc.sortie} : ${movie.released}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode
+                                ? greyColor
+                                : greyColor.withValues(alpha: 0.8),
+                      ),
                     ),
                   if (isValid(movie.boxOffice))
                     Text(
-                      "Box Office : ${movie.boxOffice}",
-                      style: const TextStyle(fontSize: 16, color: greyColor),
+                      "${loc.boxOffice} : ${movie.boxOffice}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode
+                                ? greyColor
+                                : greyColor.withValues(alpha: 0.8),
+                      ),
                     ),
                   if (isValid(movie.awards))
                     Text(
-                      "Récompenses : ${movie.awards}",
-                      style: const TextStyle(fontSize: 16, color: greyColor),
+                      "${loc.recompenses} : ${movie.awards}",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            themeProvider.isDarkMode
+                                ? greyColor
+                                : greyColor.withValues(alpha: 0.8),
+                      ),
                     ),
                 ],
               ),
@@ -450,10 +552,15 @@ class _InfoFilmState extends State<InfoFilm> {
   }
 
   Widget _buildPlaceholder() {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return Container(
       height: 120,
       width: double.infinity,
-      color: blackColor,
+      color:
+          themeProvider.isDarkMode
+              ? blackColor
+              : greyColor.withValues(alpha: 0.25),
       child: const Center(
         child: Icon(CupertinoIcons.film, size: 48, color: greyColor),
       ),

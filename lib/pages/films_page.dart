@@ -6,9 +6,11 @@ import 'package:letter_round/pages/nav_bar.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
+import 'package:letter_round/widgets/custom_appbar.dart';
 import 'package:letter_round/widgets/film_card.dart';
 import 'package:letter_round/widgets/search_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilmsPage extends StatefulWidget {
   const FilmsPage({super.key});
@@ -45,42 +47,12 @@ class _FilmsPageState extends State<FilmsPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
-      appBar: AppBar(
-        backgroundColor:
-            themeProvider.isDarkMode ? backgroundColor : whiteColor,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          size: 32,
-          color: themeProvider.isDarkMode ? whiteColor : blackColor,
-        ),
-        leading: Builder(
-          builder:
-              (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-              icon: Icon(CupertinoIcons.settings, size: 32),
-            ),
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(themeProvider: themeProvider),
       drawer: NavBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,7 +73,7 @@ class _FilmsPageState extends State<FilmsPage> {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return Center(
                 child: Text(
-                  'Aucun film trouvé.',
+                  loc.aucunFilm,
                   style: TextStyle(
                     color: themeProvider.isDarkMode ? whiteColor : blackColor,
                   ),
@@ -117,7 +89,7 @@ class _FilmsPageState extends State<FilmsPage> {
                         displayedMovies.isEmpty
                             ? Center(
                               child: Text(
-                                'Aucun film trouvé.',
+                                loc.aucunFilm,
                                 style: TextStyle(
                                   color:
                                       themeProvider.isDarkMode

@@ -130,7 +130,10 @@ class FilmCard extends StatelessWidget {
     return Container(
       height: 120,
       width: double.infinity,
-      color: themeProvider.isDarkMode ? blackColor : greyColor.withValues(alpha: 0.25),
+      color:
+          themeProvider.isDarkMode
+              ? blackColor
+              : greyColor.withValues(alpha: 0.25),
       child: Center(
         child: const Icon(CupertinoIcons.film, size: 48, color: greyColor),
       ),

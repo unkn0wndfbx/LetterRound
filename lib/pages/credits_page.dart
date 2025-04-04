@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:letter_round/theme_provider.dart';
 import 'package:letter_round/widgets/credits_card.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class CreditsPage extends StatelessWidget {
   const CreditsPage({super.key});
@@ -21,17 +24,27 @@ class CreditsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor:
+            themeProvider.isDarkMode ? backgroundColor : whiteColor,
         appBar: AppBar(
-          backgroundColor: blackColor,
+          backgroundColor:
+              themeProvider.isDarkMode
+                  ? blackColor
+                  : greyColor.withValues(alpha: 0.3),
           elevation: 0,
-          iconTheme: const IconThemeData(size: 32, color: whiteColor),
+          iconTheme: IconThemeData(
+            size: 32,
+            color: themeProvider.isDarkMode ? whiteColor : blackColor,
+          ),
           title: Text(
-            'Crédits',
+            loc.credits,
             style: TextStyle(
-              color: whiteColor,
+              color: themeProvider.isDarkMode ? whiteColor : blackColor,
               fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
@@ -39,7 +52,7 @@ class CreditsPage extends StatelessWidget {
           leading: Builder(
             builder:
                 (context) => IconButton(
-                  icon: Icon(CupertinoIcons.back, size: 32, color: whiteColor),
+                  icon: Icon(CupertinoIcons.back, size: 32),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -50,7 +63,7 @@ class CreditsPage extends StatelessWidget {
           future: _loadCredits(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator(color: blue,));
+              return Center(child: CircularProgressIndicator(color: blue));
             }
 
             if (snapshot.hasError) {

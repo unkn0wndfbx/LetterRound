@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/pages/films_page.dart';
 import 'package:letter_round/pages/home_page.dart';
-import 'package:letter_round/pages/info_film.dart';
 import 'package:letter_round/pages/profile_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomBar extends StatefulWidget {
   final int initialIndex;
@@ -38,15 +38,16 @@ class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
       body:
-          [
-            const HomePage(),
-            const FilmsPage(),
-            const ProfilPage(),
-          ][_currentIndex],
+      [
+        const HomePage(),
+        const FilmsPage(),
+        const ProfilPage(),
+      ][_currentIndex],
       bottomNavigationBar: SalomonBottomBar(
         margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
         currentIndex: _currentIndex,
@@ -54,30 +55,30 @@ class _BottomBarState extends State<BottomBar> {
         items: [
           SalomonBottomBarItem(
             icon: const Icon(CupertinoIcons.house_fill),
-            title: const Text('Accueil'),
+            title: Text(loc.accueil),
             selectedColor: themeProvider.isDarkMode ? whiteColor : blackColor,
             unselectedColor:
-                themeProvider.isDarkMode
-                    ? whiteColor.withValues(alpha: .45)
-                    : blackColor.withValues(alpha: .45),
+            themeProvider.isDarkMode
+                ? whiteColor.withValues(alpha: .45)
+                : blackColor.withValues(alpha: .45),
           ),
           SalomonBottomBarItem(
             icon: const Icon(CupertinoIcons.film_fill),
-            title: const Text('Films'),
+            title: Text(loc.films),
             selectedColor: themeProvider.isDarkMode ? whiteColor : blackColor,
             unselectedColor:
-                themeProvider.isDarkMode
-                    ? whiteColor.withValues(alpha: .45)
-                    : blackColor.withValues(alpha: .45),
+            themeProvider.isDarkMode
+                ? whiteColor.withValues(alpha: .45)
+                : blackColor.withValues(alpha: .45),
           ),
           SalomonBottomBarItem(
             icon: const Icon(CupertinoIcons.person_fill),
-            title: const Text('Profil'),
+            title: Text(loc.profil),
             selectedColor: themeProvider.isDarkMode ? whiteColor : blackColor,
             unselectedColor:
-                themeProvider.isDarkMode
-                    ? whiteColor.withValues(alpha: .45)
-                    : blackColor.withValues(alpha: .45),
+            themeProvider.isDarkMode
+                ? whiteColor.withValues(alpha: .45)
+                : blackColor.withValues(alpha: .45),
           ),
         ],
       ),

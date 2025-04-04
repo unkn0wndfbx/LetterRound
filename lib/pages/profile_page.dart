@@ -7,12 +7,14 @@ import 'package:letter_round/pages/edit_username_page.dart';
 import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
+import 'package:letter_round/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/film_card.dart';
 import '../widgets/search_bar.dart';
 import 'nav_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProfilPage extends StatefulWidget {
   const ProfilPage({super.key});
@@ -124,44 +126,12 @@ class _ProfilPageState extends State<ProfilPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: themeProvider.isDarkMode ? backgroundColor : whiteColor,
-      appBar: AppBar(
-        backgroundColor:
-            themeProvider.isDarkMode
-                ? blackColor
-                : greyColor.withValues(alpha: 0.3),
-        elevation: 0,
-        iconTheme: IconThemeData(
-          size: 32,
-          color: themeProvider.isDarkMode ? whiteColor : blackColor,
-        ),
-        leading: Builder(
-          builder:
-              (context) => IconButton(
-                icon: Icon(CupertinoIcons.bars, size: 32),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 14),
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-              icon: Icon(CupertinoIcons.settings, size: 32),
-            ),
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(themeProvider: themeProvider),
       drawer: NavBar(),
       body: RefreshIndicator(
         onRefresh: _refreshData,
@@ -175,7 +145,7 @@ class _ProfilPageState extends State<ProfilPage> {
                 width: double.infinity,
                 decoration: const BoxDecoration(color: Colors.transparent),
                 child: Text(
-                  'Ma Cinémathèque',
+                  loc.maCinematheque,
                   style: TextStyle(
                     color: themeProvider.isDarkMode ? whiteColor : blackColor,
                     fontSize: 22,
@@ -257,7 +227,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         Column(
                           children: [
                             Text(
-                              "Note Moyenne",
+                              loc.noteMoyenne,
                               style: TextStyle(color: greyColor, fontSize: 14),
                             ),
                             Text(
@@ -273,7 +243,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         Column(
                           children: [
                             Text(
-                              "Films vus",
+                              loc.filmsVus,
                               style: TextStyle(color: greyColor, fontSize: 14),
                             ),
                             Text(
@@ -289,7 +259,7 @@ class _ProfilPageState extends State<ProfilPage> {
                         Column(
                           children: [
                             Text(
-                              "Total heures",
+                              loc.totalHeures,
                               style: TextStyle(color: greyColor, fontSize: 14),
                             ),
                             Text(
@@ -334,7 +304,7 @@ class _ProfilPageState extends State<ProfilPage> {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Center(
                         child: Text(
-                          'Aucun film trouvé.',
+                          loc.aucunFilm,
                           style: TextStyle(
                             color:
                                 themeProvider.isDarkMode
@@ -354,9 +324,9 @@ class _ProfilPageState extends State<ProfilPage> {
                           Expanded(
                             child:
                                 displayedMovies.isEmpty
-                                    ? const Center(
+                                    ? Center(
                                       child: Text(
-                                        'Aucun film trouvé.',
+                                        loc.aucunFilm,
                                         style: TextStyle(color: red),
                                       ),
                                     )

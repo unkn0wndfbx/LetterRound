@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditUsernamePage extends StatefulWidget {
   final String currentUsername;
@@ -38,6 +39,7 @@ class _EditUsernamePageState extends State<EditUsernamePage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -53,7 +55,7 @@ class _EditUsernamePageState extends State<EditUsernamePage> {
           color: themeProvider.isDarkMode ? whiteColor : blackColor,
         ),
         title: Text(
-          'Modifier le username',
+          loc.modifUsername,
           style: TextStyle(
             color: themeProvider.isDarkMode ? whiteColor : blackColor,
             fontSize: 17,
@@ -79,7 +81,7 @@ class _EditUsernamePageState extends State<EditUsernamePage> {
               controller: _controller,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(18),
-                hintText: "Nouveau username",
+                hintText: loc.nouveauUsername,
                 hintStyle: TextStyle(
                   color:
                       themeProvider.isDarkMode
@@ -118,8 +120,8 @@ class _EditUsernamePageState extends State<EditUsernamePage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                "Enregistrer",
+              child: Text(
+                loc.enregistrer,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
