@@ -42,6 +42,8 @@ flutter:
     - assets/images/splash.png
     - assets/credits.json
     - assets/images/logo_s.png
+    - assets/images/watch.png
+    - assets/images/rating.png
 
   fonts:
     - family: ArchivoBlack

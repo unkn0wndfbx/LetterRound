@@ -18,28 +18,62 @@ class OnBoardingPage extends StatelessWidget {
         pages: [
           PageViewModel(
             title: 'Bienvenue !',
-            body:
-                'Nous sommes ravis de vous accueillir. Cette application est conçue pour vous offrir une expérience fluide et agréable. Parcourez ces étapes pour découvrir toutes les fonctionnalités qui vous attendent.',
+            bodyWidget: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Nous sommes ravis de vous accueillir. Cette application est conçue pour vous offrir une expérience fluide et agréable. Parcourez ces étapes pour découvrir toutes les fonctionnalités qui vous attendent.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: greyColor,
+                  ),
+                ),
+              ],
+            ),
             image: buildImage('assets/images/splash.png'),
             decoration: getPageDecoration(yellow),
           ),
           PageViewModel(
             title: 'Adaptez l’application à vos besoins',
-            body:
-                'Personnalisez votre profil en quelques clics ! Ajoutez votre nom, les films que vous avez vus, et ajustez vos préférences pour une expérience encore plus personnalisée.',
-            image: buildImage('assets/images/logo_s.png'),
+            bodyWidget: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Personnalisez votre profil en quelques clics ! Ajoutez votre nom, les films que vous avez vus, et ajustez vos préférences pour une expérience encore plus personnalisée.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: greyColor,
+                  ),
+                ),
+              ],
+            ),
+            image: buildImage('assets/images/rating.png'),
             decoration: getPageDecoration(red),
           ),
           PageViewModel(
             title: 'Explorez les fonctionnalités',
-            body:
-                'Découvrez les différentes fonctionnalités qui vous aideront à noter les films. Que ce soit pour voir les informations d\'un film, noter le film, tout est intuitif.',
-            image: buildImage('assets/images/splash.png'),
-            decoration: getPageDecoration(yellow),
+            bodyWidget: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Découvrez les différentes fonctionnalités qui vous aideront à noter les films. Que ce soit pour voir les informations d\'un film, noter le film, tout est intuitif.',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: greyColor,
+                  ),
+                ),
+              ],
+            ),
+            image: buildImage('assets/images/watch.png'),
+            decoration: getPageDecoration(blue),
           ),
           PageViewModel(
             title: "Prêt à commencer ?",
             bodyWidget: Column(
+              spacing: 32,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
@@ -53,10 +87,7 @@ class OnBoardingPage extends StatelessWidget {
                 TextButton(
                   onPressed: () => goToHome(context),
                   child: Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 60,
-                      vertical: 20,
-                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 64),
                     padding: EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
@@ -145,7 +176,8 @@ class OnBoardingPage extends StatelessWidget {
       fontWeight: FontWeight.w500,
       color: greyColor,
     ),
-    bodyPadding: const EdgeInsets.symmetric(horizontal: 20),
+    titlePadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+    bodyPadding: const EdgeInsets.symmetric(horizontal: 24),
     imagePadding: const EdgeInsets.all(64),
     pageColor: backgroundColor,
   );
