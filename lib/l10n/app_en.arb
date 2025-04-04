@@ -26,5 +26,16 @@
   "filmsVus": "Films seen",
   "totalHeures": "Total hours",
   "theme": "Theme",
-  "rechercheFilm": "Search a film..."
+  "rechercheFilm": "Search a film...",
+  "onBoarding1Title": "Welcome!",
+  "onBoarding1Texte": "We are delighted to welcome you. This application is designed to provide you with a smooth and enjoyable experience. Go through these steps to discover all the features that await you.",
+  "onBoarding2Title": "Tailor the app to your needs",
+  "onBoarding2Texte": "Customize your profile in just a few clicks! Add your name, the films you've seen, and adjust your preferences for an even more personalized experience.",
+  "onBoarding3Title": "Explore the features",
+  "onBoarding3Texte": "Discover the various features that will help you rate films. Whether it's to view a film's information, rate the film, everything is intuitive.",
+  "onBoarding4Title": "Ready to start?",
+  "onBoarding4Texte": "You are now ready to start the adventure!",
+  "allonsY": "Let's go!",
+  "terminer": "Finish",
+  "suivant": "Next"
 }

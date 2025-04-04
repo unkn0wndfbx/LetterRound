@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:letter_round/models/movie.dart';
-import 'package:letter_round/pages/settings_page.dart';
 import 'package:letter_round/ressources/colors.dart';
 import 'package:letter_round/theme_provider.dart';
 import 'package:letter_round/widgets/custom_appbar.dart';
@@ -45,7 +44,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
-
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(

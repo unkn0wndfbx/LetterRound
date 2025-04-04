@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:letter_round/pages/bottom_bar.dart';
 import 'package:letter_round/ressources/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({super.key});
@@ -12,17 +13,18 @@ class OnBoardingPage extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle.dark.copyWith(statusBarColor: Colors.transparent),
     );
+    final loc = AppLocalizations.of(context)!;
 
     return SafeArea(
       child: IntroductionScreen(
         pages: [
           PageViewModel(
-            title: 'Bienvenue !',
+            title: loc.onBoarding1Title,
             bodyWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Nous sommes ravis de vous accueillir. Cette application est conçue pour vous offrir une expérience fluide et agréable. Parcourez ces étapes pour découvrir toutes les fonctionnalités qui vous attendent.',
+                Text(
+                  loc.onBoarding1Texte,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -35,12 +37,12 @@ class OnBoardingPage extends StatelessWidget {
             decoration: getPageDecoration(yellow),
           ),
           PageViewModel(
-            title: 'Adaptez l’application à vos besoins',
+            title: loc.onBoarding2Title,
             bodyWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Personnalisez votre profil en quelques clics ! Ajoutez votre nom, les films que vous avez vus, et ajustez vos préférences pour une expérience encore plus personnalisée.',
+                Text(
+                  loc.onBoarding2Texte,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -53,12 +55,12 @@ class OnBoardingPage extends StatelessWidget {
             decoration: getPageDecoration(red),
           ),
           PageViewModel(
-            title: 'Explorez les fonctionnalités',
+            title: loc.onBoarding3Title,
             bodyWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  'Découvrez les différentes fonctionnalités qui vous aideront à noter les films. Que ce soit pour voir les informations d\'un film, noter le film, tout est intuitif.',
+                Text(
+                  loc.onBoarding3Texte,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -71,13 +73,13 @@ class OnBoardingPage extends StatelessWidget {
             decoration: getPageDecoration(blue),
           ),
           PageViewModel(
-            title: "Prêt à commencer ?",
+            title: loc.onBoarding4Title,
             bodyWidget: Column(
               spacing: 32,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  "Vous êtes maintenant prêt à commencer l'aventure !",
+                Text(
+                  loc.onBoarding4Texte,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
@@ -97,9 +99,9 @@ class OnBoardingPage extends StatelessWidget {
                         colors: [red, yellow],
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Allons-y !",
+                        loc.allonsY,
                         style: TextStyle(
                           fontSize: 22,
                           color: backgroundColor,
@@ -115,8 +117,8 @@ class OnBoardingPage extends StatelessWidget {
             decoration: getPageDecoration(whiteColor),
           ),
         ],
-        done: const Text(
-          'Done',
+        done: Text(
+          loc.terminer,
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 20,
@@ -133,7 +135,7 @@ class OnBoardingPage extends StatelessWidget {
         showBackButton: false,
         showSkipButton: true,
         skip: Text(
-          'Skip',
+          loc.suivant,
           style: TextStyle(
             fontSize: 20,
             color: greyColor,
