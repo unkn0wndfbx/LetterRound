@@ -22,8 +22,8 @@
       "items": [
         {
           "title": "API de films et séries",
-          "name": "OMB",
-          "subtitle": "Site officiel",
+          "name": "OMDb",
+          "subtitle": "API OMDb",
           "link": "http://www.omdbapi.com/"
         }
       ]

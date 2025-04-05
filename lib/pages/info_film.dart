@@ -44,24 +44,26 @@ class _InfoFilmState extends State<InfoFilm> {
     await prefs.setInt('${widget.imdbId}_rating', selectedStars);
   }
 
-  final snackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'Je l\'ai vu !',
-      message: 'Le film vient d\'être ajouté à votre cinémathèque.',
-      contentType: ContentType.success,
-      inMaterialBanner: true,
-    ),
-  );
-
   void toggleSeen() {
     setState(() {
       hasSeen = !hasSeen;
       if (!hasSeen) {
         selectedStars = 0;
       } else {
+        final loc = AppLocalizations.of(context)!;
+
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: loc.vu,
+            message: loc.vuText,
+            contentType: ContentType.success,
+            inMaterialBanner: true,
+          ),
+        );
+
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(snackBar);
@@ -74,6 +76,25 @@ class _InfoFilmState extends State<InfoFilm> {
     setState(() {
       selectedStars = rating;
       hasSeen = rating > 0;
+      if (rating > 0) {
+        final loc = AppLocalizations.of(context)!;
+
+        final snackBar = SnackBar(
+          elevation: 0,
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          content: AwesomeSnackbarContent(
+            title: loc.vu,
+            message: loc.vuText,
+            contentType: ContentType.success,
+            inMaterialBanner: true,
+          ),
+        );
+
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(snackBar);
+      }
     });
     _savePreferences();
   }
