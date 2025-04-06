@@ -342,9 +342,9 @@ class _InfoFilmState extends State<InfoFilm> {
                               : blackColor.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Row(
+                    child: Wrap(
                       spacing: 4,
-                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         if (isValid(movie.genre))
                           Text(
